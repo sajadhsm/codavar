@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>All submissions</h2>
+
+<ul>
+    {% for sub in submissions %}
+    <li>{{ sub.problem.title }} at {{ sub.upload_date }} [Score: {{ sub.judge_score }}]</li>
+    {% endfor %}
+</ul>
+{% endblock %}

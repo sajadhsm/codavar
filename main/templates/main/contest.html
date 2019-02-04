@@ -14,4 +14,10 @@
 <p>
     {{ problem.text }}
 </p>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Upload</button>
+</form>
 {% endblock %}
