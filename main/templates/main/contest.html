@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<ul>
+    {% for problem in contest.problem_set.all %}
+    <li><a href="{% url 'contest_problem' contest.pk problem.pk %}">{{ problem.title }}</a></li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h3>{{ problem.title }}</h3>
+
+<p>
+    {{ problem.text }}
+</p>
+{% endblock %}

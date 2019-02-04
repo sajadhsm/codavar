@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>List of contests:</h2>
+<ul>
+  {% for contest in contests %}
+  <li><a href="{% url 'contest_index' contest.pk %}">{{ contest.name }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
