@@ -1,6 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Contest, Problem, Submission
 from .forms import SubmissionForm
 from .tasks import run_selenium_test
@@ -9,7 +12,7 @@ def index(request):
     contests = Contest.objects.all()
     return render(request, 'main/index.html', {'contests': contests})
 
-class ContestIndexView(View):
+class ContestIndexView(LoginRequiredMixin, View):
     def render(self, request):
         return render(request, 'main/contest.html', {
             'contest': self.contest,
@@ -40,7 +43,7 @@ class ContestIndexView(View):
 
         return self.render(request)
 
-
+@login_required
 def contest_problem(request, contest_pk, problem_pk):
     contest = get_object_or_404(Contest, pk=contest_pk)
     problem = Problem.objects.get(pk=problem_pk)
@@ -66,6 +69,18 @@ def contest_problem(request, contest_pk, problem_pk):
         'form': form
     })
 
+@login_required
 def contest_submissions(request, contest_pk):
     submissions = Submission.objects.filter(user=request.user)
     return render(request, 'main/contest_submissions.html', {'submissions': submissions})
+
+@login_required
+def contest_registeration(request, contest_pk):
+    contest = get_object_or_404(Contest, pk=contest_pk)
+    user = request.user
+
+    if not user.contests.filter(pk=contest_pk).exists():
+        user.contests.add(contest)
+        contest.users.add(user)
+    
+    return redirect('contest_index', contest_pk)
