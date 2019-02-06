@@ -129,7 +129,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
+# Authentication
+
 LOGOUT_REDIRECT_URL = 'index'
+
+LOGIN_REDIRECT_URL = 'index'
 
 
 # Celery
