@@ -3,6 +3,7 @@ from django.views.generic import View
 
 from .models import Contest, Problem, Submission
 from .forms import SubmissionForm
+from .tasks import run_selenium_test
 
 def index(request):
     contests = Contest.objects.all()
@@ -27,6 +28,8 @@ class ContestIndexView(View):
             submission.user = request.user
             submission.save()
 
+            run_selenium_test.delay(submission.pk)
+
             return redirect('contest_submissions', self.kwargs['contest_pk'])
 
     def get(self, request, *args, **kwargs):
@@ -49,6 +52,8 @@ def contest_problem(request, contest_pk, problem_pk):
             submission.problem = problem
             submission.user = request.user
             submission.save()
+
+            run_selenium_test.delay(submission.pk)
 
             return redirect('contest_submissions', contest_pk)
         

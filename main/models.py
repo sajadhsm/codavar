@@ -15,9 +15,20 @@ class Problem(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
+    # used as module path for __import__
+    selenium_script_as_module_string = models.CharField(max_length=500)
 
     def __str__(self):
         return self.title
+    
+    def run_selenium_script(self, sub_dir_path):
+        _temp = __import__(
+            self.selenium_script_as_module_string,
+            globals=globals(),
+            fromlist=['selenium_test'],
+            level=1)
+        selenium_test = _temp.selenium_test
+        return selenium_test(sub_dir_path)
 
 def generate_filename(instance, filename):
     return "zipfiles/{}/{}".format(instance.user.username, filename)

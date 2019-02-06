@@ -1,2 +1,4 @@
 Django==2.1.5
 python-magic
+selenium
+celery

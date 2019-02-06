@@ -130,3 +130,8 @@ MEDIA_URL = '/media/'
 
 
 LOGOUT_REDIRECT_URL = 'index'
+
+
+# Celery
+
+CELERY_BROKER_URL = 'amqp://localhost'
