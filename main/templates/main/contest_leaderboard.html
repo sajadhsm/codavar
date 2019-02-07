@@ -4,7 +4,7 @@
 <div class="container">
     <nav class="p-2 nav bg-white shadow-sm rounded border mt-4">
         <a class="nav-link text-secondary" href="{% url 'contest_index' contest.pk %}">Problems</a>
-        <a class="nav-link text-secondary" href="#">Submissions</a>
+        <a class="nav-link text-secondary" href="{% url 'contest_submissions' contest.pk %}">Submissions</a>
         <a class="nav-link bg-secondary text-white rounded" href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
     </nav>
 </div>
@@ -14,12 +14,12 @@
         <table class="table table-bordered bg-white shadow-sm text-center">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col">Rank</th>
-                    <th scope="col">User</th>
+                    <th scope="col" style="width: 5%; vertical-align: middle;">Rank</th>
+                    <th scope="col" style="vertical-align: middle;">User</th>
                     {% for problem in contest.problem_set.all %}
-                    <th scope="col">{{ problem.title }}</th>
+                    <th scope="col" style="vertical-align: middle;">{{ problem.title }}</th>
                     {% endfor %}
-                    <th scope="col">Score</th>
+                    <th scope="col" style="vertical-align: middle;">Score</th>
                 </tr>
             </thead>
             <tbody>

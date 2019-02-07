@@ -1,11 +1,41 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h2>All submissions</h2>
+<div class="container">
+    <nav class="p-2 nav bg-white shadow-sm rounded border mt-4">
+        <a class="nav-link text-secondary" href="{% url 'contest_index' contest_pk %}">Problems</a>
+        <a class="nav-link bg-secondary text-white rounded" href="{% url 'contest_submissions' contest_pk %}">Submissions</a>
+        <a class="nav-link text-secondary" href="{% url 'contest_leaderboard' contest_pk %}">Leaderboard</a>
+    </nav>
+</div>
 
-<ul>
-    {% for sub in submissions %}
-    <li>{{ sub.problem.title }} at {{ sub.upload_date }} [Score: {{ sub.judge_score }}]</li>
-    {% endfor %}
-</ul>
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white shadow-sm text-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 5%; vertical-align: middle;">Final Code</th>
+                    <th scope="col" style="vertical-align: middle;">Problem</th>
+                    <th scope="col" style="vertical-align: middle;">Upload Date</th>
+                    <th scope="col" style="vertical-align: middle;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in submissions %}
+                <tr>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="sub-{{sub.pk}}" {% if sub.is_final %}checked{% endif %}>
+                            <label class="custom-control-label" for="sub-{{sub.pk}}"></label>
+                        </div>
+                    </td>
+                    <th scope="row">{{ sub.problem.title }}</th>
+                    <td>{{ sub.upload_date }}</td>
+                    <td>{{ sub.judge_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

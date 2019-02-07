@@ -73,8 +73,13 @@ def contest_problem(request, contest_pk, problem_pk):
 
 @login_required
 def contest_submissions(request, contest_pk):
-    submissions = Submission.objects.filter(user=request.user)
-    return render(request, 'main/contest_submissions.html', {'submissions': submissions})
+    submissions = Submission.objects \
+        .filter(user=request.user, problem__contest=contest_pk) \
+        .order_by('-upload_date')
+    return render(request, 'main/contest_submissions.html', {
+        'submissions': submissions,
+        'contest_pk': contest_pk
+    })
 
 @login_required
 def contest_registeration(request, contest_pk):
