@@ -1,24 +1,83 @@
 {% extends 'main/base.html' %}
 
+{% load static %}
+{% load widget_tweaks %}
+
 {% block content %}
-<ul>
-    {% for problem in contest.problem_set.all %}
-    <li><a href="{% url 'contest_problem' contest.pk problem.pk %}">{{ problem.title }}</a></li>
-    {% endfor %}
-</ul>
+<div class="container">
+    <nav class="p-2 nav bg-white shadow-sm rounded border mt-4">
+        <a class="nav-link bg-secondary text-white rounded" href="{% url 'contest_index' contest.pk %}">Problems</a>
+        <a class="nav-link text-secondary" href="#">Submissions</a>
+        <a class="nav-link text-secondary" href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
+    </nav>
+</div>
 
-<hr>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 mt-4">
+            <div class="card shadow-sm">
+                <div class="card-header h5">Problems</div>
+                <div class="list-group list-group-flush">
+                    {% for c_problem in contest.problem_set.all %}
+                    <a href="{% url 'contest_problem' contest.pk c_problem.pk %}" class="list-group-item list-group-item-action {% if c_problem.pk == problem.pk %}active{% endif %}">
+                        {{ c_problem.title }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-<h3>{{ problem.title }}</h3>
-<a href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
+        <div class="col-md-9 mt-4">
+            <div class="card shadow-sm">
+                <h1 class="card-header h5">{{ problem.title }}</h1>
+                <div class="card-body">
+                    <p class="card-text">
+                        {{ problem.text }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
 
-<p>
-    {{ problem.text }}
-</p>
+                        <div class="form-row">
+                            {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field }}
+                            {% endfor %}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Upload</button>
-</form>
+                            {% for field in form.visible_fields %}
+                            <div class="col-auto">
+                                <div class="custom-file">
+                                    {% render_field field class="custom-file-input" %}
+                                    {{ field|add_label_class:"custom-file-label" }}
+                                    {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                    <div style="color: #dc3545; font-size: 80%; margin-top: .25rem;">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'main/js/bs-custom-file-input.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        bsCustomFileInput.init()
+    })
+</script>
 {% endblock %}
