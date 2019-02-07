@@ -82,6 +82,33 @@ def contest_submissions(request, contest_pk):
     })
 
 @login_required
+def set_as_final_sub(request, contest_pk, sub_pk):
+    # TODO: Improve the queryset
+
+    submission = get_object_or_404(Submission, pk=sub_pk)
+    
+    if not submission.is_final:
+        problem_subs = Submission.objects \
+            .filter(user=request.user, problem=submission.problem, problem__contest=contest_pk)
+
+        for sub in problem_subs:
+            if sub.is_final:
+                sub.is_final = False
+                sub.save()
+        
+        submission.is_final = True
+        submission.save()
+
+    submissions = Submission.objects \
+        .filter(user=request.user, problem__contest=contest_pk) \
+        .order_by('-upload_date')
+
+    return render(request, 'main/contest_submissions.html', {
+        'submissions': submissions,
+        'contest_pk': contest_pk
+    })
+
+@login_required
 def contest_registeration(request, contest_pk):
     contest = get_object_or_404(Contest, pk=contest_pk)
     user = request.user
