@@ -1,37 +1,48 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h2>Contest Leaderboard</h2>
+<div class="container">
+    <nav class="p-2 nav bg-white shadow-sm rounded border mt-4">
+        <a class="nav-link text-secondary" href="{% url 'contest_index' contest.pk %}">Problems</a>
+        <a class="nav-link text-secondary" href="#">Submissions</a>
+        <a class="nav-link bg-secondary text-white rounded" href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
+    </nav>
+</div>
 
-<table border="1">
-    <thead>
-        <th>Rank</th>
-        <th>User</th>
-        {% for problem in contest.problem_set.all %}
-        <th>{{ problem.title }}</th>
-        {% endfor %}
-        <th>Score</th>
-    </thead>
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white shadow-sm text-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">User</th>
+                    {% for problem in contest.problem_set.all %}
+                    <th scope="col">{{ problem.title }}</th>
+                    {% endfor %}
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c_user in users %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ c_user.username }}</td>
 
-    <tbody>
-        {% for c_user in users %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ c_user.username }}</td>
+                    {% for problem in contest.problem_set.all %}
+                    <td>
+                        {% for sub in contest_subs %}
+                        {% if sub.user == c_user and sub.problem == problem %}
+                        {{ sub.judge_score }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
 
-            {% for problem in contest.problem_set.all %}
-            <td>
-                {% for sub in contest_subs %}
-                {% if sub.user == c_user and sub.problem == problem %}
-                {{ sub.judge_score }}
-                {% endif %}
+                    <td>{{ c_user.total_score }}</td>
+                </tr>
                 {% endfor %}
-            </td>
-            {% endfor %}
-
-            <td>{{ c_user.total_score }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
