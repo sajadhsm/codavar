@@ -1,0 +1,37 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>Contest Leaderboard</h2>
+
+<table border="1">
+    <thead>
+        <th>Rank</th>
+        <th>User</th>
+        {% for problem in contest.problem_set.all %}
+        <th>{{ problem.title }}</th>
+        {% endfor %}
+        <th>Score</th>
+    </thead>
+
+    <tbody>
+        {% for c_user in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ c_user.username }}</td>
+
+            {% for problem in contest.problem_set.all %}
+            <td>
+                {% for sub in contest_subs %}
+                {% if sub.user == c_user and sub.problem == problem %}
+                {{ sub.judge_score }}
+                {% endif %}
+                {% endfor %}
+            </td>
+            {% endfor %}
+
+            <td>{{ c_user.total_score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

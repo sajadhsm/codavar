@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 
+from django.db.models import Sum, Case, When, IntegerField
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -84,3 +86,31 @@ def contest_registeration(request, contest_pk):
         contest.users.add(user)
     
     return redirect('contest_index', contest_pk)
+
+def contest_leaderboard(request, contest_pk):
+    # There should be a better approuch to retrive
+    # final submission and gather everthing into a single
+    # queryset but for now it's working...! :)
+
+    # TODO: Improve queryset
+
+    contest = get_object_or_404(Contest, pk=contest_pk)
+
+    contest_subs = Submission.objects \
+    .filter(problem__contest=contest, is_final=True)
+
+    users = contest.users \
+        .annotate(total_score=Sum(Case(
+            When(submission__is_final=True, then='submission__judge_score'),
+            output_field=IntegerField()
+        ))).order_by('-total_score')
+
+    return render(
+        request,
+        'main/contest_leaderboard.html',
+        {
+            'contest': contest,
+            'users': users,
+            'contest_subs': contest_subs
+        }
+    )

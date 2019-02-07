@@ -40,6 +40,7 @@ class Submission(models.Model):
     zip_file = models.FileField(upload_to=generate_filename)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     judge_score = models.IntegerField(null=True)
+    is_final = models.BooleanField(default=False)
 
     def __str__(self):
         return "{} by {} at {}".format(self.problem.title, self.user.username, self.upload_date)

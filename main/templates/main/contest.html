@@ -10,6 +10,7 @@
 <hr>
 
 <h3>{{ problem.title }}</h3>
+<a href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
 
 <p>
     {{ problem.text }}
