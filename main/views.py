@@ -110,12 +110,16 @@ def contest_leaderboard(request, contest_pk):
 
     contest = get_object_or_404(Contest, pk=contest_pk)
 
-    contest_subs = Submission.objects \
-    .filter(problem__contest=contest, is_final=True)
+    contest_subs = Submission.objects.filter(
+        problem__contest=contest,
+        is_final=True)
 
-    users = contest.users \
-        .annotate(total_score=Sum(Case(
-            When(submission__is_final=True, then='submission__judge_score'),
+    users = contest.users.annotate(total_score=Sum(
+        Case(When(
+                submission__is_final=True,
+                submission__in=contest_subs,
+                then='submission__judge_score'
+            ),
             output_field=IntegerField()
         ))).order_by('-total_score')
 
