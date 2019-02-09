@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Sum, Case, When, IntegerField
 
 from django.contrib.auth.decorators import login_required
+from .decorators import contest_has_started
 
 from .models import Contest, Problem, Submission
 from .forms import SubmissionForm
@@ -13,6 +14,7 @@ def index(request):
     return render(request, 'main/index.html', {'contests': contests})
 
 @login_required
+@contest_has_started
 def contest_index(request, contest_pk):
     contest = get_object_or_404(Contest, pk=contest_pk)
     problem = contest.problem_set.all().first()
@@ -39,6 +41,7 @@ def contest_index(request, contest_pk):
     })
 
 @login_required
+@contest_has_started
 def contest_problem(request, contest_pk, problem_pk):
     contest = get_object_or_404(Contest, pk=contest_pk)
     problem = Problem.objects.get(pk=problem_pk)
@@ -65,6 +68,7 @@ def contest_problem(request, contest_pk, problem_pk):
     })
 
 @login_required
+@contest_has_started
 def contest_submissions(request, contest_pk):
     submissions = Submission.objects \
         .filter(user=request.user, problem__contest=contest_pk) \
@@ -75,6 +79,7 @@ def contest_submissions(request, contest_pk):
     })
 
 @login_required
+@contest_has_started
 def set_as_final_sub(request, contest_pk, sub_pk):
     # TODO: Improve the queryset
 
@@ -109,6 +114,7 @@ def contest_registration(request, contest_pk):
 
     return redirect('index')
 
+@contest_has_started
 def contest_leaderboard(request, contest_pk):
     # There should be a better approuch to retrive
     # final submission and gather everthing into a single
