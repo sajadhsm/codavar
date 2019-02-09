@@ -13,21 +13,59 @@
   {% for contest in contests %}
   <div class="card mb-3 shadow-sm">
     <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="font-weight-bold">{{ contest.name }}</span>
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <span class="font-weight-bold mb-3 mb-md-0 w-25">{{ contest.name }}</span>
 
-        {% if contest in user.contests.all %}
-          {% if contest.is_in_progress %}
-          <a href="{% url 'contest_index' contest.pk %}" class="btn btn-primary" role="button">Enter</a>
+        <div class="start-time mb-3 mb-md-0 w-25" data-start-date="{{contest.start_date.isoformat}}">
+          {% if contest.has_started %}
+            <span class="start-time-fix">{{contest.start_date.isoformat}}</span>
           {% else %}
-          <a href="{% url 'contest_index' contest.pk %}" class="btn btn-primary disabled" role="button" aria-disabled="true">Enter</a>
+            <span class="start-time-countdown">TODO: Countdown</span>
           {% endif %}
-        {% else %}
-        <a href="{% url 'contest_registration' contest.pk %}" class="btn btn-success" role="button">Register</a>
-        {% endif %}
+        </div>
+
+        <div class="duration d-flex justify-content-center mb-3 mb-md-0 w-25" data-duration="{{contest.duration.total_seconds}}"></div>
+
+        
+        <div class="w-25">
+          {% if contest.has_ended %}
+            <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary" role="button">Enter</a>
+          {% else %}
+            {% if contest in user.contests.all %}
+              {% if contest.is_in_progress %}
+              <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary" role="button">Enter</a>
+              {% else %}
+              <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary disabled" role="button" aria-disabled="true">Enter</a>
+              {% endif %}
+            {% else %}
+            <a href="{% url 'contest_registration' contest.pk %}" class="btn btn-block btn-success" role="button">Register</a>
+            {% endif %}
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
   {% endfor %}
 </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  const contestsDuration = document.querySelectorAll('.duration');
+  contestsDuration.forEach(dur => {
+    const duration = dur.dataset.duration;
+
+    const d = Math.floor(duration / 86400);
+    const h = Math.floor((duration % 86400) / 3600);
+    const m = Math.floor((duration % 3600) / 60);
+
+    let htmlString = "";
+
+    if (d) htmlString += `<small class="text-center mx-1"><b class="h6">${d}</b><br>days</small>`;
+    if (h) htmlString += `<small class="text-center mx-1"><b class="h6">${h}</b><br>hours</small>`;
+    if (m) htmlString += `<small class="text-center mx-1"><b class="h6">${m}</b><br>minutes</small>`;
+
+    dur.innerHTML = htmlString;
+  })
+</script>
 {% endblock %}

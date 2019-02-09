@@ -23,6 +23,9 @@ class Contest(models.Model):
     def is_in_progress(self):
         return self.has_started() and not self.has_ended()
     
+    @property
+    def duration(self):
+        return self.end_date - self.start_date
 
 class Problem(models.Model):
     title = models.CharField(max_length=200)
