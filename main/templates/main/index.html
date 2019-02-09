@@ -24,7 +24,7 @@
           {% if contest.has_started %}
             <div class="start-time-fix">{{ contest.start_date|date:"d M Y H:i"}}</div>
           {% else %}
-            <div class="start-time-countdown d-flex justify-content-center" data-end-date="{{contest.end_date.isoformat}}"></div>
+            <div class="start-time-countdown d-flex justify-content-center" data-start-date="{{contest.start_date.isoformat}}"></div>
           {% endif %}
         </div>
 
@@ -91,7 +91,7 @@
   }
 
   function displayCountDown(node) {
-    const time = getDistanceTime(node.dataset.endDate);
+    const time = getDistanceTime(node.dataset.startDate);
 
     let htmlString = `<small class="text-center mx-1"><b class="h6">${time.d}</b><br>days</small>`;
     htmlString += `<small class="text-center mx-1"><b class="h6">${time.h}</b><br>hours</small>`;
