@@ -23,7 +23,8 @@
                         class="list-group-item list-group-item-action {% if c_problem.pk == problem.pk %}active{% endif %}">
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="mr-2">{{ c_problem.title }}</span>
-                            <span class="badge badge-{% if c_problem.pk == problem.pk %}light{% else %}secondary{% endif %}">
+                            <span
+                                class="badge badge-{% if c_problem.pk == problem.pk %}light{% else %}secondary{% endif %}">
                                 {{ c_problem.score }}
                             </span>
                         </div>
@@ -42,6 +43,7 @@
                     </p>
                 </div>
                 <div class="card-footer">
+                    {% if contest.is_in_progress  %}
                     <form method="POST" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
 
@@ -72,6 +74,12 @@
                             </div>
                         </div>
                     </form>
+                    {% else %}
+                    <div class="alert alert-primary m-0" role="alert">
+                        Submission time is over!
+                    </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

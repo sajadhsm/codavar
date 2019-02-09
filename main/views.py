@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.exceptions import PermissionDenied
 
 from django.db.models import Sum, Case, When, IntegerField
 
@@ -20,17 +21,18 @@ def contest_index(request, contest_pk):
     problem = contest.problem_set.all().first()
 
     if request.method == 'POST':
-        form = SubmissionForm(request.POST, request.FILES)
-        if form.is_valid():
-            submission = form.save(commit=False)
-            submission.problem = problem
-            submission.user = request.user
-            submission.save()
+        if contest.is_in_progress:
+            form = SubmissionForm(request.POST, request.FILES)
+            if form.is_valid():
+                submission = form.save(commit=False)
+                submission.problem = problem
+                submission.user = request.user
+                submission.save()
 
-            run_selenium_test.delay(submission.pk)
+                run_selenium_test.delay(submission.pk)
 
-            return redirect('contest_submissions', contest_pk)
-        
+                return redirect('contest_submissions', contest_pk)
+        raise PermissionDenied
     else:
         form = SubmissionForm()
     
@@ -47,17 +49,18 @@ def contest_problem(request, contest_pk, problem_pk):
     problem = Problem.objects.get(pk=problem_pk)
 
     if request.method == 'POST':
-        form = SubmissionForm(request.POST, request.FILES)
-        if form.is_valid():
-            submission = form.save(commit=False)
-            submission.problem = problem
-            submission.user = request.user
-            submission.save()
+        if contest.is_in_progress:
+            form = SubmissionForm(request.POST, request.FILES)
+            if form.is_valid():
+                submission = form.save(commit=False)
+                submission.problem = problem
+                submission.user = request.user
+                submission.save()
 
-            run_selenium_test.delay(submission.pk)
+                run_selenium_test.delay(submission.pk)
 
-            return redirect('contest_submissions', contest_pk)
-        
+                return redirect('contest_submissions', contest_pk)    
+        raise PermissionDenied
     else:
         form = SubmissionForm()
     
