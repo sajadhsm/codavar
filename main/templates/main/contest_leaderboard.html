@@ -1,5 +1,14 @@
 {% extends 'main/base.html' %}
 
+{% block stylesheet %}
+<style>
+    table th,
+    table td {
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <nav class="p-2 nav bg-white shadow-sm rounded border mt-4">
@@ -14,12 +23,12 @@
         <table class="table table-bordered bg-white shadow-sm text-center">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col" style="width: 5%; vertical-align: middle;">Rank</th>
-                    <th scope="col" style="vertical-align: middle;">User</th>
+                    <th scope="col" style="width: 5%;">Rank</th>
+                    <th scope="col">User</th>
                     {% for problem in contest.problem_set.all %}
-                    <th scope="col" style="vertical-align: middle;">{{ problem.title }}</th>
+                    <th scope="col">{{ problem.title }}</th>
                     {% endfor %}
-                    <th scope="col" style="vertical-align: middle;">Score</th>
+                    <th scope="col">Score</th>
                 </tr>
             </thead>
             <tbody>

@@ -19,8 +19,14 @@
                 <div class="card-header h5">Problems</div>
                 <div class="list-group list-group-flush">
                     {% for c_problem in contest.problem_set.all %}
-                    <a href="{% url 'contest_problem' contest.pk c_problem.pk %}" class="list-group-item list-group-item-action {% if c_problem.pk == problem.pk %}active{% endif %}">
-                        {{ c_problem.title }}
+                    <a href="{% url 'contest_problem' contest.pk c_problem.pk %}"
+                        class="list-group-item list-group-item-action {% if c_problem.pk == problem.pk %}active{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="mr-2">{{ c_problem.title }}</span>
+                            <span class="badge badge-{% if c_problem.pk == problem.pk %}light{% else %}secondary{% endif %}">
+                                {{ c_problem.score }}
+                            </span>
+                        </div>
                     </a>
                     {% endfor %}
                 </div>

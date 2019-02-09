@@ -31,6 +31,7 @@ class Problem(models.Model):
     title = models.CharField(max_length=200)
     text = models.TextField()
     contest = models.ForeignKey(Contest, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField(default=10)
     # used as module path for __import__
     selenium_script_as_module_string = models.CharField(max_length=500)
 
