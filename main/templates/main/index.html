@@ -13,21 +13,27 @@
   {% for contest in contests %}
   <div class="card mb-3 shadow-sm">
     <div class="card-body">
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-        <span class="font-weight-bold mb-3 mb-md-0 w-25">{{ contest.name }}</span>
+      <div class="row text-center">
+        <div class="col-md-3 pb-3 pb-md-0">
+            <small class="d-block font-weight-bold mb-2">Contest Name</small>
+            <h3 class="h5">{{ contest.name }}</h3>
+        </div>
 
-        <div class="start-time mb-3 mb-md-0 w-25" data-start-date="{{contest.start_date.isoformat}}">
+        <div class="col-md-3 pb-3 pb-md-0">
+          <small class="d-block font-weight-bold mb-2">Start Date</small>
           {% if contest.has_started %}
-            <span class="start-time-fix">{{contest.start_date.isoformat}}</span>
+            <div class="start-time-fix">{{ contest.start_date|date:"d M Y H:i"}}</div>
           {% else %}
-            <span class="start-time-countdown">TODO: Countdown</span>
+            <div class="start-time-countdown d-flex justify-content-center" data-end-date="{{contest.end_date.isoformat}}"></div>
           {% endif %}
         </div>
 
-        <div class="duration d-flex justify-content-center mb-3 mb-md-0 w-25" data-duration="{{contest.duration.total_seconds}}"></div>
-
+        <div class="col-md-3 pb-3 pb-md-0">
+            <small class="d-block font-weight-bold mb-2">Contest Duration</small>
+            <div class="duration d-flex justify-content-center" data-duration="{{contest.duration.total_seconds}}"></div>
+        </div>
         
-        <div class="w-25">
+        <div class="col-md-3 align-self-center">
           {% if contest.has_ended %}
             <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary" role="button">Enter</a>
           {% else %}
@@ -67,5 +73,40 @@
 
     dur.innerHTML = htmlString;
   })
+
+
+  function getDistanceTime(endDate) {
+    const distance = new Date(endDate) - new Date();
+
+    let time = {d: 0, h: 0, m: 0, s: 0};
+
+    if (distance >= 0) {
+      time.d = Math.floor(distance / 86400000);
+      time.h = Math.floor((distance % 86400000) / 3600000);
+      time.m = Math.floor((distance % 3600000) / 60000);
+      time.s = Math.floor((distance % 60000) / 1000);
+    }
+
+    return time;
+  }
+
+  function displayCountDown(node) {
+    const time = getDistanceTime(node.dataset.endDate);
+
+    let htmlString = `<small class="text-center mx-1"><b class="h6">${time.d}</b><br>days</small>`;
+    htmlString += `<small class="text-center mx-1"><b class="h6">${time.h}</b><br>hours</small>`;
+    htmlString += `<small class="text-center mx-1"><b class="h6">${time.m}</b><br>minutes</small>`;
+    htmlString += `<small class="text-center mx-1"><b class="h6">${time.s}</b><br>seconds</small>`;
+
+    node.innerHTML = htmlString;
+  }
+
+  const startTimeCountdowns = document.querySelectorAll('.start-time-countdown');
+
+  startTimeCountdowns.forEach(displayCountDown);
+
+  const contestInterval = setInterval(() => {
+    startTimeCountdowns.forEach(displayCountDown);
+  }, 1000);
 </script>
 {% endblock %}
