@@ -102,15 +102,19 @@ def set_as_final_sub(request, contest_pk, sub_pk):
     return redirect('contest_submissions', contest_pk)
 
 @login_required
-def contest_registeration(request, contest_pk):
+def contest_registration(request, contest_pk):
     contest = get_object_or_404(Contest, pk=contest_pk)
-    user = request.user
 
-    if not user.contests.filter(pk=contest_pk).exists():
-        user.contests.add(contest)
-        contest.users.add(user)
-    
-    return redirect('contest_index', contest_pk)
+    if not contest.has_ended():
+        user = request.user
+        if not user.contests.filter(pk=contest_pk).exists():
+            user.contests.add(contest)
+            contest.users.add(user)
+        
+        if contest.has_started():
+            return redirect('contest_index', contest_pk)
+
+    return redirect('index')
 
 def contest_leaderboard(request, contest_pk):
     # There should be a better approuch to retrive

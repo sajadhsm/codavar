@@ -17,9 +17,13 @@
         <span class="font-weight-bold">{{ contest.name }}</span>
 
         {% if contest in user.contests.all %}
-        <a href="{% url 'contest_index' contest.pk %}" class="btn btn-primary">Enter</a>
+          {% if contest.is_in_progress %}
+          <a href="{% url 'contest_index' contest.pk %}" class="btn btn-primary" role="button">Enter</a>
+          {% else %}
+          <a href="{% url 'contest_index' contest.pk %}" class="btn btn-primary disabled" role="button" aria-disabled="true">Enter</a>
+          {% endif %}
         {% else %}
-        <a href="{% url 'contest_registeration' contest.pk %}" class="btn btn-success">Register</a>
+        <a href="{% url 'contest_registration' contest.pk %}" class="btn btn-success" role="button">Register</a>
         {% endif %}
       </div>
     </div>

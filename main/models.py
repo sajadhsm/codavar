@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from zipfile import ZipFile
+from django.utils import timezone
 
 class Contest(models.Model):
     name = models.CharField(max_length=200)
@@ -11,6 +12,17 @@ class Contest(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def has_started(self):
+        return True if self.start_date < timezone.now() else False
+    
+    def has_ended(self):
+        return True if self.end_date < timezone.now() else False
+    
+    @property
+    def is_in_progress(self):
+        return self.has_started() and not self.has_ended()
+    
 
 class Problem(models.Model):
     title = models.CharField(max_length=200)
