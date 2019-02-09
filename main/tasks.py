@@ -9,7 +9,7 @@ def run_selenium_test(submission_pk):
     Find the selenium script for given submission.problem
     Run the script and get the score
     Update submission.judge_score
-    Set submission as final for among this problem submissions
+    Set submission as final
     """
     submission = Submission.objects.get(pk=submission_pk)
     problem = submission.problem
@@ -19,12 +19,4 @@ def run_selenium_test(submission_pk):
     score = problem.run_selenium_script(sub_extracted_dir)
     submission.judge_score = score
     
-    try:
-        old_final = Submission.objects.get(problem=problem, is_final=True)
-        old_final.is_final = False
-        old_final.save()
-    except:
-        pass
-    
-    submission.is_final = True
-    submission.save()
+    submission.set_as_final()

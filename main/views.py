@@ -81,22 +81,8 @@ def contest_submissions(request, contest_pk):
 @login_required
 @contest_has_started
 def set_as_final_sub(request, contest_pk, sub_pk):
-    # TODO: Improve the queryset
-
-    submission = get_object_or_404(Submission, pk=sub_pk)
-    
-    if not submission.is_final:
-        problem_subs = Submission.objects \
-            .filter(user=request.user, problem=submission.problem, problem__contest=contest_pk)
-
-        for sub in problem_subs:
-            if sub.is_final:
-                sub.is_final = False
-                sub.save()
-        
-        submission.is_final = True
-        submission.save()
-
+    submission = get_object_or_404(Submission, pk=sub_pk, user=request.user)
+    if not submission.is_final: submission.set_as_final()
     return redirect('contest_submissions', contest_pk)
 
 @login_required

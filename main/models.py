@@ -60,6 +60,18 @@ class Submission(models.Model):
     def __str__(self):
         return "{} by {} at {}".format(self.problem.title, self.user.username, self.upload_date)
     
+    def set_as_final(self):
+        '''
+        Set only one instance of current problem user submission as final
+        '''
+        Submission.objects.filter(
+            user=self.user,
+            problem=self.problem,
+            is_final=True
+        ).update(is_final=False)
+        self.is_final = True
+        self.save()
+
     def extract(self):
         with ZipFile(self.zip_file.path, 'r') as zip: 
             # Extract the zip content to same name sibiling directory
