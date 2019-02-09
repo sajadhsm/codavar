@@ -34,13 +34,13 @@
             </div>
         </div>
 
-        <div class="col-md-9 mt-4">
+        <div class="col-md-9 my-4">
             <div class="card shadow-sm">
-                <h1 class="card-header h5">{{ problem.title }}</h1>
+                <h1 class="card-header h5 font-weight-bold">{{ problem.title }}</h1>
                 <div class="card-body">
-                    <p class="card-text">
-                        {{ problem.text }}
-                    </p>
+                    <div class="card-text">
+                        {{ problem.text|safe }}
+                    </div>
                 </div>
                 <div class="card-footer">
                     {% if contest.is_in_progress  %}

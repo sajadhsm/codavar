@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'django_summernote',
     'main',
     'accounts',
 ]
@@ -143,3 +144,15 @@ LOGIN_REDIRECT_URL = 'index'
 # Celery
 
 CELERY_BROKER_URL = 'amqp://localhost'
+
+
+# Summernote
+
+SUMMERNOTE_THEME = 'bs4'
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'width': '80%',
+        'height': '640',
+    },
+}

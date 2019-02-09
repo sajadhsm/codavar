@@ -3,3 +3,4 @@ python-magic
 selenium
 celery
 django-widget-tweaks
+django_summernote
