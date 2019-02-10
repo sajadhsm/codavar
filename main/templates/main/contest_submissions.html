@@ -20,6 +20,7 @@
         transform: translate(-50%, -50%);
         font-size: 1.3rem;
     }
+
     .sub-status-td span {
         display: inline-block;
         min-width: 3rem;
@@ -50,6 +51,7 @@
                 </tr>
             </thead>
             <tbody>
+                {% if submissions %}
                 {% for sub in submissions %}
                 <tr>
                     <td>
@@ -77,6 +79,11 @@
                     </td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="4">No data</td>
+                </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>
