@@ -10,12 +10,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <nav class="p-2 nav bg-white shadow-sm rounded border mt-4">
-        <a class="nav-link text-secondary" href="{% url 'contest_index' contest.pk %}">Problems</a>
-        <a class="nav-link text-secondary" href="{% url 'contest_submissions' contest.pk %}">Submissions</a>
-        <a class="nav-link bg-secondary text-white rounded"
-            href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
+<div class="nav-scroller bg-white shadow-sm">
+    <nav class="nav nav-underline">
+        <a class="nav-link" href="{% url 'contest_index' contest.pk %}">Problems</a>
+        <a class="nav-link" href="{% url 'contest_submissions' contest.pk %}">Submissions</a>
+        <a class="nav-link active" href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
     </nav>
 </div>
 
