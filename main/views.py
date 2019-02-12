@@ -31,7 +31,9 @@ def contest_index(request, contest_pk):
                 run_selenium_test.delay(submission.pk)
 
                 return redirect('contest_submissions', contest_pk)
-        raise PermissionDenied
+        else:
+            # Don't allow form submission after contest is over
+            raise PermissionDenied
     else:
         form = SubmissionForm()
     
@@ -59,7 +61,9 @@ def contest_problem(request, contest_pk, problem_pk):
                 run_selenium_test.delay(submission.pk)
 
                 return redirect('contest_submissions', contest_pk)    
-        raise PermissionDenied
+        else:
+            # Don't allow form submission after contest is over
+            raise PermissionDenied
     else:
         form = SubmissionForm()
     
