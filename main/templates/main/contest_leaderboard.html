@@ -1,5 +1,7 @@
 {% extends 'main/base.html' %}
 
+{% load main_tags %}
+
 {% block stylesheet %}
 <style>
     table th,
@@ -44,6 +46,8 @@
                         {% for sub in entry.final_subs %}
                         {% if sub.user == entry.user and sub.problem == problem %}
                         {{ sub.judge_score }}
+                        <br>
+                        <small>{{ sub.contest_start_timedelta|timedelta_hh_mm }}</small>
                         {% endif %}
                         {% endfor %}
                     </td>
