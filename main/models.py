@@ -72,6 +72,9 @@ class Submission(models.Model):
         ).update(is_final=False)
         self.is_final = True
         self.save()
+    
+    def contest_start_timedelta(self):
+        return self.upload_date - self.problem.contest.start_date
 
     def extract(self):
         with ZipFile(self.zip_file.path, 'r') as zip: 

@@ -1,7 +1,7 @@
+from datetime import timedelta
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import PermissionDenied
-
-from django.db.models import Sum, Case, When, IntegerField
 
 from django.contrib.auth.decorators import login_required
 from .decorators import contest_has_started
@@ -105,33 +105,40 @@ def contest_registration(request, contest_pk):
 
 @contest_has_started
 def contest_leaderboard(request, contest_pk):
-    # There should be a better approuch to retrive
-    # final submission and gather everthing into a single
-    # queryset but for now it's working...! :)
-
-    # TODO: Improve queryset
-
     contest = get_object_or_404(Contest, pk=contest_pk)
+    
+    leaderboard = []
 
-    contest_subs = Submission.objects.filter(
-        problem__contest=contest,
-        is_final=True)
+    for user in contest.users.all():
+        subs = user.submission_set.filter(problem__contest=contest, is_final=True)
+        total_score, total_seconds, sub_count = 0, 0, 0
+        for sub in subs:
+            sub_count += 1
+            total_score += sub.judge_score
+            total_seconds += sub.contest_start_timedelta().total_seconds()
+        
+        if sub_count: total_seconds /= sub_count
+        
+        total_time = str(timedelta(seconds=round(total_seconds)))
 
-    users = contest.users.annotate(total_score=Sum(
-        Case(When(
-                submission__is_final=True,
-                submission__in=contest_subs,
-                then='submission__judge_score'
-            ),
-            output_field=IntegerField()
-        ))).order_by('-total_score')
+        leaderboard.append({
+            'user': user,
+            'final_subs': subs,
+            'total_score': total_score,
+            'total_seconds': total_seconds,
+            'total_time': total_time,
+        })
+    
+    leaderboard = sorted(
+        leaderboard,
+        key=lambda u: (u['total_score'], u['total_seconds']),
+        reverse=True)
 
     return render(
         request,
         'main/contest_leaderboard.html',
         {
             'contest': contest,
-            'users': users,
-            'contest_subs': contest_subs
+            'leaderboard': leaderboard
         }
     )

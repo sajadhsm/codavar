@@ -29,26 +29,28 @@
                     <th scope="col">{{ problem.title }}</th>
                     {% endfor %}
                     <th scope="col">Score</th>
+                    <th scope="col">Time</th>
                 </tr>
             </thead>
             <tbody>
-                {% if users %}
-                {% for c_user in users %}
+                {% if leaderboard %}
+                {% for entry in leaderboard %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ c_user.username }}</td>
+                    <td>{{ entry.user.username }}</td>
 
                     {% for problem in contest.problem_set.all %}
                     <td>
-                        {% for sub in contest_subs %}
-                        {% if sub.user == c_user and sub.problem == problem %}
+                        {% for sub in entry.final_subs %}
+                        {% if sub.user == entry.user and sub.problem == problem %}
                         {{ sub.judge_score }}
                         {% endif %}
                         {% endfor %}
                     </td>
                     {% endfor %}
 
-                    <td>{{ c_user.total_score }}</td>
+                    <td>{{ entry.total_score }}</td>
+                    <td>{{ entry.total_time }}</td>
                 </tr>
                 {% endfor %}
                 {% else %}
