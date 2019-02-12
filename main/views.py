@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import PermissionDenied
 
@@ -9,6 +7,7 @@ from .decorators import contest_has_started
 from .models import Contest, Problem, Submission
 from .forms import SubmissionForm
 from .tasks import run_selenium_test
+from .utils import get_contest_leaderboard
 
 def index(request):
     contests = Contest.objects.all()
@@ -106,34 +105,7 @@ def contest_registration(request, contest_pk):
 @contest_has_started
 def contest_leaderboard(request, contest_pk):
     contest = get_object_or_404(Contest, pk=contest_pk)
-    
-    leaderboard = []
-
-    for user in contest.users.all():
-        subs = user.submission_set.filter(problem__contest=contest, is_final=True)
-        total_score, total_seconds, sub_count = 0, 0, 0
-        for sub in subs:
-            sub_count += 1
-            total_score += sub.judge_score
-            total_seconds += sub.contest_start_timedelta().total_seconds()
-        
-        if sub_count: total_seconds /= sub_count
-        
-        total_time = str(timedelta(seconds=round(total_seconds)))
-
-        leaderboard.append({
-            'user': user,
-            'final_subs': subs,
-            'total_score': total_score,
-            'total_seconds': total_seconds,
-            'total_time': total_time,
-        })
-    
-    leaderboard = sorted(
-        leaderboard,
-        key=lambda u: (u['total_score'], u['total_seconds']),
-        reverse=True)
-
+    leaderboard = get_contest_leaderboard(contest)
     return render(
         request,
         'main/contest_leaderboard.html',
