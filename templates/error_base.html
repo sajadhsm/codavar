@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+
+{% block stylesheet %}
+<style>
+html,
+body {
+    height: 100%;
+}
+</style>
+{% endblock stylesheet %}
+
+{% block body %}
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-12 text-center">
+            <h1 class="display-1">{% block error_code %}{% endblock error_code %}</h1>
+            <p class="lead">{% block error_message %}{% endblock error_message %}</p>
+            <a href="{% url 'index' %}" class="btn btn-primary">Go to homepage</a>
+        </div>
+    </div>
+</div>
+{% endblock body %}
