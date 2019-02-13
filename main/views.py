@@ -61,7 +61,9 @@ def contest_submissions(request, contest_pk):
 @contest_has_started
 def set_as_final_sub(request, contest_pk, sub_pk):
     submission = get_object_or_404(Submission, pk=sub_pk, user=request.user)
-    if not submission.is_final: submission.set_as_final()
+    # Don't set pending submissions as final
+    if not submission.is_final and submission.judge_score != None:
+        submission.set_as_final()
     return redirect('contest_submissions', contest_pk)
 
 @login_required
