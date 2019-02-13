@@ -15,39 +15,12 @@ def index(request):
 
 @login_required
 @contest_has_started
-def contest_index(request, contest_pk):
+def contest_problem(request, contest_pk, problem_pk=None):
     contest = get_object_or_404(Contest, pk=contest_pk)
-    problem = contest.problem_set.all().first()
-
-    if request.method == 'POST':
-        if contest.is_in_progress:
-            form = SubmissionForm(request.POST, request.FILES)
-            if form.is_valid():
-                submission = form.save(commit=False)
-                submission.problem = problem
-                submission.user = request.user
-                submission.save()
-
-                run_selenium_test.delay(submission.pk)
-
-                return redirect('contest_submissions', contest_pk)
-        else:
-            # Don't allow form submission after contest is over
-            raise PermissionDenied
+    if problem_pk:
+        problem = Problem.objects.get(pk=problem_pk)
     else:
-        form = SubmissionForm()
-    
-    return render(request, 'main/contest.html', {
-        'contest': contest,
-        'problem': problem,
-        'form': form
-    })
-
-@login_required
-@contest_has_started
-def contest_problem(request, contest_pk, problem_pk):
-    contest = get_object_or_404(Contest, pk=contest_pk)
-    problem = Problem.objects.get(pk=problem_pk)
+        problem = contest.problem_set.first()
 
     if request.method == 'POST':
         if contest.is_in_progress:
