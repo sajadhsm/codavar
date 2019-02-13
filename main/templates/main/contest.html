@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% extends 'base/base.html' %}
 
 {% load static %}
 {% load widget_tweaks %}
@@ -88,7 +88,7 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{% static 'main/js/bs-custom-file-input.min.js' %}"></script>
+<script src="{% static 'js/bs-custom-file-input.min.js' %}"></script>
 <script>
     $(document).ready(function () {
         bsCustomFileInput.init()
