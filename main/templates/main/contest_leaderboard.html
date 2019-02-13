@@ -42,12 +42,14 @@
                     <td>{{ entry.user.username }}</td>
 
                     {% for problem in contest.problem_set.all %}
-                    <td>
+                    <td class="p-0">
                         {% for sub in entry.final_subs %}
                         {% if sub.user == entry.user and sub.problem == problem %}
-                        {{ sub.judge_score }}
-                        <br>
-                        <small>{{ sub.contest_start_timedelta|timedelta_hh_mm }}</small>
+                        <div class="p-2" style="{{sub | respective_bg_color_css_rule}}">
+                            <span class="font-weight-bold">{{ sub.judge_score }}</span>
+                            <br>
+                            <small>{{ sub.contest_start_timedelta|timedelta_hh_mm }}</small>
+                        </div>
                         {% endif %}
                         {% endfor %}
                     </td>
