@@ -22,7 +22,7 @@
 
 <div class="container mt-4">
     <div class="table-responsive">
-        <table class="table table-bordered bg-white shadow-sm text-center">
+        <table class="table table-bordered table-striped bg-white shadow-sm text-center">
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 5%;">Rank</th>
@@ -37,7 +37,7 @@
             <tbody>
                 {% if leaderboard %}
                 {% for entry in leaderboard %}
-                <tr>
+                <tr {% if entry.user == user %}class="table-warning"{% endif %}>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ entry.user.username }}</td>
 
