@@ -105,3 +105,4 @@ venv.bak/
 
 # Codavar stuff:
 media/
+test_scripts/*
