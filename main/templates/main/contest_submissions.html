@@ -39,6 +39,15 @@
 </div>
 
 <div class="container mt-4">
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
     <div class="table-responsive">
         <table class="table table-bordered bg-white shadow-sm text-center">
             <thead class="thead-light">

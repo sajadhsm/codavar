@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import PermissionDenied
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .decorators import contest_has_started
 
+from .decorators import contest_has_started
 from .models import Contest, Problem, Submission
 from .forms import SubmissionForm
 from .tasks import run_selenium_test
@@ -30,9 +30,8 @@ def contest_problem(request, contest_pk, problem_pk=None):
                 submission.problem = problem
                 submission.user = request.user
                 submission.save()
-
                 run_selenium_test.delay(submission.pk)
-
+                messages.success(request, 'Your code was uploaded successfully!')
                 return redirect('contest_submissions', contest_pk)    
         else:
             # Don't allow form submission after contest is over
