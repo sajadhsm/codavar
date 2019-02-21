@@ -22,6 +22,9 @@ class Problem(models.Model):
     score = models.PositiveIntegerField(default=10)
     selenium_script = models.FileField(upload_to=generate_filename, storage=upload_storage)
 
+    class Meta:
+        ordering = ['score']
+
     def __str__(self):
         return self.title
     
