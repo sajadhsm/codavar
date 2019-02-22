@@ -4,13 +4,8 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<div class="nav-scroller bg-white shadow-sm">
-    <nav class="nav nav-underline">
-        <a class="nav-link active" href="{% url 'contest_index' contest.pk %}">Problems</a>
-        <a class="nav-link" href="{% url 'contest_submissions' contest.pk %}">Submissions</a>
-        <a class="nav-link" href="{% url 'contest_leaderboard' contest.pk %}">Leaderboard</a>
-    </nav>
-</div>
+
+{% include 'main/contest_navigation.html' with active='problems' contest=contest %}
 
 <div class="container">
     <div class="row">

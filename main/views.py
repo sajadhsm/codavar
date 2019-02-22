@@ -48,12 +48,15 @@ def contest_problem(request, contest_pk, problem_pk=None):
 @login_required
 @contest_has_started
 def contest_submissions(request, contest_pk):
+    # Get the contest only for count-down
+    # Better to find a work around to avoid this query
+    contest = get_object_or_404(Contest, pk=contest_pk)
     submissions = Submission.objects \
         .filter(user=request.user, problem__contest=contest_pk) \
         .order_by('-upload_date')
     return render(request, 'main/contest_submissions.html', {
         'submissions': submissions,
-        'contest_pk': contest_pk
+        'contest': contest
     })
 
 @login_required
