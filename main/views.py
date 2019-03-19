@@ -75,8 +75,12 @@ def contest_registration(request, contest_pk):
     if not contest.has_ended():
         user = request.user
         if not user.contests.filter(pk=contest_pk).exists():
-            user.contests.add(contest)
-            contest.users.add(user)
+            if user.first_name and user.last_name:
+                user.contests.add(contest)
+                contest.users.add(user)
+            else:
+                messages.info(request, "Please set your first name and last name in-order to enter the contest!")
+                return redirect('account_edit')
         
         if contest.has_started():
             return redirect('contest_index', contest_pk)
