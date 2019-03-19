@@ -106,3 +106,7 @@ venv.bak/
 # Codavar stuff:
 media/
 test_scripts/*
+
+# IDEs stuff:
+.vscode
+.idea
