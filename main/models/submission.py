@@ -3,7 +3,7 @@ from zipfile import ZipFile
 from .problem import Problem
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 def generate_filename(instance, filename):
     return "zipfiles/{}/{}".format(instance.user.username, filename)
@@ -12,7 +12,7 @@ class Submission(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     zip_file = models.FileField(upload_to=generate_filename)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     judge_score = models.IntegerField(null=True)
     is_final = models.BooleanField(default=False)
 
