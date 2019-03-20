@@ -20,6 +20,12 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainMenu">
+            <ul class="navbar-nav mt-1">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">About</a> 
+                </li>
+            </ul>
+
             {% if user.is_authenticated %}
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
