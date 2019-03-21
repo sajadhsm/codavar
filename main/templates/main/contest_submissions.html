@@ -51,6 +51,7 @@
                     <th scope="col">Problem</th>
                     <th scope="col">Upload Date</th>
                     <th scope="col" style="width: 10%;">Status</th>
+                    <th scope="col" style="width: 10%;">File</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,6 +81,7 @@
                         <span class="bg-danger text-white p-2 rounded">{{ sub.judge_score }}</span>
                         {% endif %}
                     </td>
+                    <td><a href="{% url 'submission_file_download' sub.pk %}">Download</a></td>
                 </tr>
                 {% endfor %}
                 {% else %}

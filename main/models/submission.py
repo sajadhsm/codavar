@@ -1,3 +1,4 @@
+import secrets
 from zipfile import ZipFile
 
 from .problem import Problem
@@ -6,7 +7,12 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 def generate_filename(instance, filename):
-    return "zipfiles/{}/{}".format(instance.user.username, filename)
+    # Makes it a little harder to guess the file location for end user
+    # by using random secret token
+    # TODO: But it's still possible for every one to download the file
+    # if they find the actual file URL
+    # Maybe try: https://github.com/edoburu/django-private-storage
+    return "submissions/{}/{}".format(secrets.token_urlsafe(10), filename)
 
 class Submission(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
@@ -17,7 +23,7 @@ class Submission(models.Model):
     is_final = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} by {} at {}".format(self.problem.title, self.user.username, self.upload_date)
+        return "{} by {} at {}".format(self.problem.title, self.user.email, self.upload_date)
     
     def set_as_final(self):
         '''

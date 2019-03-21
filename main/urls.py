@@ -10,4 +10,5 @@ urlpatterns = [
     path('contest/<int:contest_pk>/submissions/<int:sub_pk>/', views.set_as_final_sub, name='set_as_final_sub'),
     path('contest/<int:contest_pk>/register/', views.contest_registration, name='contest_registration'),
     path('contest/<int:contest_pk>/leaderboard/', views.contest_leaderboard, name='contest_leaderboard'),
+    path('submission/<int:sub_pk>/download/', views.submission_file_download, name='submission_file_download'),
 ]
