@@ -79,9 +79,18 @@ def submission_file_download(request, sub_pk):
 @contest_has_started
 def set_as_final_sub(request, contest_pk, sub_pk):
     submission = get_object_or_404(Submission, pk=sub_pk, user=request.user)
-    # Don't set pending submissions as final
-    if not submission.is_final and submission.judge_score != None:
+    contest = submission.problem.contest
+
+    if not contest.is_in_progress:
+        messages.error(request, "You can only set a submission as final during the contest!")
+    elif submission.judge_score == None: # Pending submission
+        messages.info(request, "This submission can't be set as final yet!")
+    elif submission.is_final:
+        messages.info(request, "This submission has been already set as final.")
+    else:
         submission.set_as_final()
+        messages.success(request, "The submission has been successfully set as final.")
+    
     return redirect('contest_submissions', contest_pk)
 
 @login_required
