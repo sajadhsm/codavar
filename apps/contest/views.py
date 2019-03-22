@@ -1,18 +1,19 @@
-from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from apps.problem.models import Problem
+from apps.submission.models import Submission
+from .models import Contest
 from .decorators import contest_has_started
-from .models import Contest, Problem, Submission
 from .forms import SubmissionForm
 from .tasks import run_selenium_test
 from .utils import get_contest_leaderboard
 
 def index(request):
     contests = Contest.objects.all()
-    return render(request, 'main/index.html', {'contests': contests})
+    return render(request, 'contest/index.html', {'contests': contests})
 
 @login_required
 @contest_has_started
@@ -40,7 +41,7 @@ def contest_problem(request, contest_pk, problem_pk=None):
     else:
         form = SubmissionForm()
     
-    return render(request, 'main/contest.html', {
+    return render(request, 'contest/contest.html', {
         'contest': contest,
         'problem': problem,
         'form': form
@@ -55,25 +56,10 @@ def contest_submissions(request, contest_pk):
     submissions = Submission.objects \
         .filter(user=request.user, problem__contest=contest_pk) \
         .order_by('-upload_date')
-    return render(request, 'main/contest_submissions.html', {
+    return render(request, 'contest/contest_submissions.html', {
         'submissions': submissions,
         'contest': contest
     })
-
-@login_required
-def submission_file_download(request, sub_pk):
-    # TODO: Maybe better to be handle by web server according to:
-    # https://stackoverflow.com/a/7304609
-    submission = get_object_or_404(Submission, pk=sub_pk)
-
-    if request.user == submission.user:
-        with open(submission.zip_file.path, 'rb') as file:
-            response = HttpResponse(file, content_type='application/zip')
-            file_name = submission.zip_file.name.split('/')[-1]
-            response['Content-Disposition'] = f'attachment; filename={file_name}'
-            return response
-    else:
-        raise Http404
 
 @login_required
 @contest_has_started
@@ -118,7 +104,7 @@ def contest_leaderboard(request, contest_pk):
     leaderboard = get_contest_leaderboard(contest)
     return render(
         request,
-        'main/contest_leaderboard.html',
+        'contest/contest_leaderboard.html',
         {
             'contest': contest,
             'leaderboard': leaderboard

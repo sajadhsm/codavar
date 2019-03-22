@@ -31,7 +31,7 @@
 
 {% block content %}
 
-{% include 'main/contest_navigation.html' with active='submissions' contest=contest %}
+{% include 'contest/contest_navigation.html' with active='submissions' contest=contest %}
 
 <div class="container mt-4">
     {% for message in messages %}

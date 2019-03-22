@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from .models import Submission
+from apps.submission.models import Submission
 
 @shared_task
 def run_selenium_test(submission_pk):

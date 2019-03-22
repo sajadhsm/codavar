@@ -42,10 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    
     'widget_tweaks',
     'django_summernote',
-    'main',
-    'accounts',
+
+    'apps.contest',
+    'apps.problem',
+    'apps.submission',
+    'apps.accounts',
 ]
 
 SITE_ID = 1

@@ -3,7 +3,7 @@ import magic
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
-from .models import Submission
+from apps.submission.models import Submission
 
 SUBMISSION_ZIP_MAX_SIZE = 2097152 #2MB
 

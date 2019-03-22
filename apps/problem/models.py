@@ -1,10 +1,10 @@
 import importlib
 
-from .contest import Contest
-
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+
+from apps.contest.models import Contest
 
 upload_storage = FileSystemStorage(
     location=settings.SELENIUM_SCRIPT_UPLOAD_ROOT,

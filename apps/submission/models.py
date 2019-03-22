@@ -1,10 +1,10 @@
 import secrets
 from zipfile import ZipFile
 
-from .problem import Problem
-
 from django.db import models
 from django.contrib.auth import get_user_model
+
+from apps.problem.models import Problem
 
 def generate_filename(instance, filename):
     # Makes it a little harder to guess the file location for end user
