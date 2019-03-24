@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import Submission
+from .models.front_end_submission import FrontEndSubmission
 
-admin.site.register(Submission)
+admin.site.register(FrontEndSubmission)

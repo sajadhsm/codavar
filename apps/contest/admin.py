@@ -1,5 +1,6 @@
 from django.contrib import admin
 
-from .models import Contest
+from .models.front_end_contest import FrontEndContest, FrontEndContestParticipation
 
-admin.site.register(Contest)
+admin.site.register(FrontEndContest)
+admin.site.register(FrontEndContestParticipation)
