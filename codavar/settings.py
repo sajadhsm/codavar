@@ -151,7 +151,9 @@ MEDIA_URL = '/media/'
 
 SELENIUM_SCRIPT_IMPORT_MODULE_PACKAGE = 'test_scripts.selenium_scripts'
 
-SELENIUM_SCRIPT_UPLOAD_ROOT = os.path.join(BASE_DIR, 'test_scripts/selenium_scripts')
+SELENIUM_SCRIPT_ROOT = os.path.join(BASE_DIR, 'test_scripts/selenium_scripts')
+
+SELENIUM_SCRIPT_URL = '/judge-script/fe/'
 
 # Authentication
 
