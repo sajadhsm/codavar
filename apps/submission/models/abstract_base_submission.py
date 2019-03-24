@@ -12,8 +12,13 @@ def generate_filename(instance, filename):
     return f'submissions/{secrets.token_urlsafe(10)}/{filename}'
 
 class AbstractBaseSubmission(models.Model):
+    user = models.ForeignKey(
+        get_user_model(),
+        related_name="%(app_label)s_%(class)ss",
+        related_query_name="%(app_label)s_%(class)s",
+        on_delete=models.CASCADE
+    )
     file = models.FileField(upload_to=generate_filename)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True)
     is_correct = models.BooleanField(default=False)
 

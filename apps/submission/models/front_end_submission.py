@@ -18,7 +18,12 @@ def generate_filename(instance, filename):
 
 class FrontEndSubmission(AbstractBaseSubmission):
     file = models.FileField(upload_to=generate_filename)
-    problem = models.ForeignKey(FrontEndProblem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(
+        FrontEndProblem,
+        related_name='submissions',
+        related_query_name='submission',
+        on_delete=models.CASCADE
+    )
     judge_score = models.PositiveIntegerField(null=True)
 
     def __str__(self):

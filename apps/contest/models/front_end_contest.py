@@ -19,6 +19,16 @@ class FrontEndContest(AbstractBaseContest):
     )
 
 class FrontEndContestParticipation(models.Model):
-    participant = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    contest = models.ForeignKey(FrontEndContest, on_delete=models.CASCADE)
+    participant = models.ForeignKey(
+        get_user_model(),
+        related_name='front_end_contest_participations',
+        related_query_name='front_end_contest_participation',
+        on_delete=models.CASCADE
+    )
+    contest = models.ForeignKey(
+        FrontEndContest,
+        related_name='participations',
+        related_query_name='participation',
+        on_delete=models.CASCADE
+    )
     reg_date = models.DateTimeField(auto_now_add=True)
