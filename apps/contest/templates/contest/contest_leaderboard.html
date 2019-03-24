@@ -21,9 +21,13 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width: 5%;">Rank</th>
-                    <th scope="col">User</th>
+                    <th scope="col">Name</th>
                     {% for problem in contest.problems.all %}
-                    <th scope="col">{{ problem.title }}</th>
+                    <th scope="col">
+                        <a href="{% url 'contest_problem' contest.pk problem.pk %}" class="text-decoration-none">
+                            {{ problem.title }}
+                        </a>
+                    </th>
                     {% endfor %}
                     <th scope="col">Score</th>
                     <th scope="col">Time</th>
@@ -36,18 +40,16 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ entry.user.get_full_name }}</td>
 
-                    {% for problem in contest.problems.all %}
-                    <td class="p-0">
-                        {% for sub in entry.final_subs %}
-                        {% if sub.user == entry.user and sub.problem == problem %}
-                        <div class="p-2" style="{{sub | respective_bg_color_css_rule}}">
-                            <span class="font-weight-bold">{{ sub.judge_score }}</span>
-                            <br>
-                            <small>{{ sub.frontendcontestsubmission.contest_start_timedelta|timedelta_hide_seconds }}</small>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
+                    {% for sub in entry.final_subs %}
+                    {% if sub %}
+                    <td style="{{sub|respective_bg_color_css_rule}}">
+                        <span class="font-weight-bold">{{ sub.judge_score }}</span>
+                        <br>
+                        <small>{{ sub.frontendcontestsubmission.contest_start_timedelta|timedelta_hide_seconds }}</small>
                     </td>
+                    {% else %}
+                    <td><small>---</small></td>
+                    {% endif %}
                     {% endfor %}
 
                     <td>{{ entry.total_score }}</td>

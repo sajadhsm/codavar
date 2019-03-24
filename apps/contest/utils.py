@@ -23,6 +23,7 @@ def get_contest_leaderboard(contest):
             frontendcontestsubmission__contest=contest,
             frontendcontestsubmission__is_final=True
         )
+
         total_score, total_seconds, sub_count = 0, 0, 0
         for sub in subs:
             sub_count += 1
@@ -32,10 +33,21 @@ def get_contest_leaderboard(contest):
         if sub_count: total_seconds /= sub_count
         
         total_time = str(timedelta(seconds=round(total_seconds)))
-
+        
+        final_subs = []
+        for problem in contest.problems.all():
+            appended = False
+            for sub in subs:
+                if sub.problem == problem:
+                    final_subs.append(sub)
+                    appended = True
+                    break
+            if not appended:
+                final_subs.append(None)
+        
         leaderboard.append({
             'user': user,
-            'final_subs': subs,
+            'final_subs': final_subs,
             'total_score': total_score,
             'total_seconds': total_seconds,
             'total_time': total_time,
