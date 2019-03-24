@@ -17,13 +17,17 @@ def compare(a, b):
 def get_contest_leaderboard(contest):
     leaderboard = []
 
-    for user in contest.users.all():
-        subs = user.submission_set.filter(problem__contest=contest, is_final=True)
+    for user in contest.participants.all():
+        # Only CONTEST front-end submissions
+        subs = user.submission_frontendsubmissions.filter(
+            frontendcontestsubmission__contest=contest,
+            frontendcontestsubmission__is_final=True
+        )
         total_score, total_seconds, sub_count = 0, 0, 0
         for sub in subs:
             sub_count += 1
             total_score += sub.judge_score
-            total_seconds += sub.contest_start_timedelta().total_seconds()
+            total_seconds += sub.frontendcontestsubmission.contest_start_timedelta().total_seconds()
         
         if sub_count: total_seconds /= sub_count
         

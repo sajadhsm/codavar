@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from apps.submission.models import Submission
+from apps.submission.models import FrontEndContestSubmission
 
 @shared_task
 def run_selenium_test(submission_pk):
@@ -11,11 +11,11 @@ def run_selenium_test(submission_pk):
     Update submission.judge_score
     Set submission as final
     """
-    submission = Submission.objects.get(pk=submission_pk)
+    submission = FrontEndContestSubmission.objects.get(pk=submission_pk)
     problem = submission.problem
 
     submission.extract()
-    sub_extracted_dir = submission.zip_file.path[:-4]
+    sub_extracted_dir = submission.file.path[:-4]
     score = problem.run_selenium_script(sub_extracted_dir)
     submission.judge_score = score
     

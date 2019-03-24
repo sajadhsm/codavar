@@ -1,13 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
-from .models import Contest
+from .models import FrontEndContest
 
 def contest_has_started(function):
     def wrap(request, *args, **kwargs):
-        contest = get_object_or_404(Contest, pk=kwargs['contest_pk'])
+        contest = get_object_or_404(FrontEndContest, pk=kwargs['contest_pk'])
 
-        if contest.has_started():
+        if contest.has_started:
             return function(request, *args, **kwargs)
         else:
             raise Http404

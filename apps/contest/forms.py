@@ -3,13 +3,13 @@ import magic
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
-from apps.submission.models import Submission
+from apps.submission.models import FrontEndContestSubmission
 
 SUBMISSION_ZIP_MAX_SIZE = 2097152 #2MB
 
 class SubmissionForm(ModelForm):
     def clean_zip_file(self):
-        file = self.cleaned_data.get("zip_file")
+        file = self.cleaned_data.get("file")
         filetype = magic.from_buffer(file.read(), mime=True)
         
         if not "application/zip" in filetype:
@@ -20,5 +20,5 @@ class SubmissionForm(ModelForm):
         return file
 
     class Meta:
-        model = Submission
-        fields = ['zip_file']
+        model = FrontEndContestSubmission
+        fields = ['file']

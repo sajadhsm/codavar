@@ -37,12 +37,11 @@
           {% if contest.has_ended %}
             <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary" role="button">Enter</a>
           {% else %}
-            {% if contest in user.contests.all %}
-              {% if contest.is_in_progress %}
-              <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary" role="button">Enter</a>
-              {% else %}
-              <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary disabled" role="button" aria-disabled="true">Enter</a>
-              {% endif %}
+            {% if user in contest.participants.all %}
+            <a
+              href="{% url 'contest_index' contest.pk %}"
+              class="btn btn-block btn-primary {% if not contest.is_in_progress %}disabled{% endif %}"
+              role="button">Enter</a>
             {% else %}
             <a href="{% url 'contest_registration' contest.pk %}" class="btn btn-block btn-success" role="button">Register</a>
             {% endif %}

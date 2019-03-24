@@ -3,32 +3,33 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from apps.problem.models import Problem
-from apps.submission.models import Submission
-from .models import Contest
+from apps.problem.models import FrontEndProblem
+from apps.submission.models import FrontEndContestSubmission
+from .models import FrontEndContest, FrontEndContestParticipation
 from .decorators import contest_has_started
 from .forms import SubmissionForm
 from .tasks import run_selenium_test
 from .utils import get_contest_leaderboard
 
 def index(request):
-    contests = Contest.objects.all()
+    contests = FrontEndContest.objects.all()
     return render(request, 'contest/index.html', {'contests': contests})
 
 @login_required
 @contest_has_started
 def contest_problem(request, contest_pk, problem_pk=None):
-    contest = get_object_or_404(Contest, pk=contest_pk)
+    contest = get_object_or_404(FrontEndContest, pk=contest_pk)
     if problem_pk:
-        problem = Problem.objects.get(pk=problem_pk)
+        problem = FrontEndProblem.objects.get(pk=problem_pk)
     else:
-        problem = contest.problem_set.first()
+        problem = contest.problems.first()
 
     if request.method == 'POST':
         if contest.is_in_progress:
             form = SubmissionForm(request.POST, request.FILES)
             if form.is_valid():
                 submission = form.save(commit=False)
+                submission.contest = contest
                 submission.problem = problem
                 submission.user = request.user
                 submission.save()
@@ -52,9 +53,9 @@ def contest_problem(request, contest_pk, problem_pk=None):
 def contest_submissions(request, contest_pk):
     # Get the contest only for count-down
     # Better to find a work around to avoid this query
-    contest = get_object_or_404(Contest, pk=contest_pk)
-    submissions = Submission.objects \
-        .filter(user=request.user, problem__contest=contest_pk) \
+    contest = get_object_or_404(FrontEndContest, pk=contest_pk)
+    submissions = FrontEndContestSubmission.objects \
+        .filter(user=request.user, contest=contest_pk) \
         .order_by('-upload_date')
     return render(request, 'contest/contest_submissions.html', {
         'submissions': submissions,
@@ -64,8 +65,8 @@ def contest_submissions(request, contest_pk):
 @login_required
 @contest_has_started
 def set_as_final_sub(request, contest_pk, sub_pk):
-    submission = get_object_or_404(Submission, pk=sub_pk, user=request.user)
-    contest = submission.problem.contest
+    submission = get_object_or_404(FrontEndContestSubmission, pk=sub_pk, user=request.user)
+    contest = submission.contest
 
     if not contest.is_in_progress:
         messages.error(request, "You can only set a submission as final during the contest!")
@@ -81,26 +82,28 @@ def set_as_final_sub(request, contest_pk, sub_pk):
 
 @login_required
 def contest_registration(request, contest_pk):
-    contest = get_object_or_404(Contest, pk=contest_pk)
+    contest = get_object_or_404(FrontEndContest, pk=contest_pk)
 
-    if not contest.has_ended():
+    if not contest.has_ended:
         user = request.user
-        if not user.contests.filter(pk=contest_pk).exists():
+        if not contest.participants.filter(pk=user.pk).exists():
             if user.first_name and user.last_name:
-                user.contests.add(contest)
-                contest.users.add(user)
+                FrontEndContestParticipation.objects.create(
+                    participant=user,
+                    contest=contest
+                )
             else:
                 messages.info(request, "Please set your first name and last name in-order to enter the contest!")
                 return redirect('account_edit')
         
-        if contest.has_started():
+        if contest.has_started:
             return redirect('contest_index', contest_pk)
 
     return redirect('index')
 
 @contest_has_started
 def contest_leaderboard(request, contest_pk):
-    contest = get_object_or_404(Contest, pk=contest_pk)
+    contest = get_object_or_404(FrontEndContest, pk=contest_pk)
     leaderboard = get_contest_leaderboard(contest)
     return render(
         request,
