@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from apps.problem.models import FrontEndProblem
 from apps.submission.models import FrontEndContestSubmission
 from .models import FrontEndContest, FrontEndContestParticipation
-from .decorators import contest_has_started
+from .decorators import check_contest_access
 from .forms import SubmissionForm
 from .tasks import run_selenium_test
 from .utils import get_contest_leaderboard
@@ -16,7 +16,7 @@ def index(request):
     return render(request, 'contest/index.html', {'contests': contests})
 
 @login_required
-@contest_has_started
+@check_contest_access(FrontEndContest)
 def contest_problem(request, contest_pk, problem_pk=None):
     contest = get_object_or_404(FrontEndContest, pk=contest_pk)
     if problem_pk:
@@ -49,7 +49,7 @@ def contest_problem(request, contest_pk, problem_pk=None):
     })
 
 @login_required
-@contest_has_started
+@check_contest_access(FrontEndContest)
 def contest_submissions(request, contest_pk):
     # Get the contest only for count-down
     # Better to find a work around to avoid this query
@@ -63,7 +63,7 @@ def contest_submissions(request, contest_pk):
     })
 
 @login_required
-@contest_has_started
+@check_contest_access(FrontEndContest)
 def set_as_final_sub(request, contest_pk, sub_pk):
     submission = get_object_or_404(FrontEndContestSubmission, pk=sub_pk, user=request.user)
     contest = submission.contest
@@ -101,7 +101,7 @@ def contest_registration(request, contest_pk):
 
     return redirect('index')
 
-@contest_has_started
+@check_contest_access(FrontEndContest)
 def contest_leaderboard(request, contest_pk):
     contest = get_object_or_404(FrontEndContest, pk=contest_pk)
     leaderboard = get_contest_leaderboard(contest)

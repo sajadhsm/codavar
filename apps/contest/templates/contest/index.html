@@ -19,14 +19,14 @@
             <h3 class="h5">{{ contest.name }}</h3>
         </div>
 
-        <div class="col-md-3 pb-3 pb-md-0">
+        <time class="col-md-3 pb-3 pb-md-0" datetime="{{ contest.start_date.isoformat }}" title="{{ contest.start_date|date:"d M Y H:i"}}">
           <small class="d-block font-weight-bold mb-2">Start Date</small>
           {% if contest.has_started %}
             <div class="start-time-fix">{{ contest.start_date|date:"d M Y H:i"}}</div>
           {% else %}
             <div class="start-time-countdown d-flex justify-content-center" data-start-date="{{contest.start_date.isoformat}}"></div>
           {% endif %}
-        </div>
+        </time>
 
         <div class="col-md-3 pb-3 pb-md-0">
             <small class="d-block font-weight-bold mb-2">Contest Duration</small>
@@ -35,7 +35,7 @@
         
         <div class="col-md-3 align-self-center">
           {% if contest.has_ended %}
-            <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-primary" role="button">Enter</a>
+            <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-secondary" role="button">Review</a>
           {% else %}
             {% if user in contest.participants.all %}
             <a

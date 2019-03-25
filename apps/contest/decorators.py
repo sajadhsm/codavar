@@ -1,16 +1,15 @@
+from functools import wraps
+
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
-from .models import FrontEndContest
-
-def contest_has_started(function):
-    def wrap(request, *args, **kwargs):
-        contest = get_object_or_404(FrontEndContest, pk=kwargs['contest_pk'])
-
-        if contest.has_started:
-            return function(request, *args, **kwargs)
-        else:
-            raise Http404
-    wrap.__doc__ = function.__doc__
-    wrap.__name__ = function.__name__
-    return wrap
+def check_contest_access(ContestModel):
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            contest = get_object_or_404(ContestModel, pk=kwargs['contest_pk'])
+            if contest.is_public and contest.has_started:
+                return view_func(request, *args, **kwargs)
+            raise Http404 
+        return _wrapped_view
+    return decorator
