@@ -37,11 +37,11 @@
                         {{ problem.statement|safe }}
                     </div>
                 </div>
+                {% if user in contest.participants.all %}
                 <div class="card-footer">
                     {% if contest.is_in_progress  %}
-                    <form method="POST" enctype="multipart/form-data" novalidate>
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-
                         <div class="form-row">
                             {% for hidden_field in form.hidden_fields %}
                             {{ hidden_field }}
@@ -74,8 +74,8 @@
                         Submission time is over!
                     </div>
                     {% endif %}
-
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

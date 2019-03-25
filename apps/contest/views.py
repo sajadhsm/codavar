@@ -8,7 +8,7 @@ from apps.problem.models import FrontEndProblem
 from apps.submission.models import FrontEndContestSubmission
 from .models import FrontEndContest, FrontEndContestParticipation
 from .decorators import check_contest_access
-from .forms import SubmissionForm
+from .forms import FrontEndContestSubmissionForm
 from .tasks import run_selenium_test
 from .utils import get_contest_leaderboard
 
@@ -27,7 +27,7 @@ def contest_problem(request, contest_pk, problem_pk=None):
 
     if request.method == 'POST':
         if contest.is_in_progress:
-            form = SubmissionForm(request.POST, request.FILES)
+            form = FrontEndContestSubmissionForm(request.POST, request.FILES)
             if form.is_valid():
                 submission = form.save(commit=False)
                 submission.contest = contest
@@ -41,7 +41,7 @@ def contest_problem(request, contest_pk, problem_pk=None):
             # Don't allow form submission after contest is over
             raise PermissionDenied
     else:
-        form = SubmissionForm()
+        form = FrontEndContestSubmissionForm()
     
     return render(request, 'contest/contest.html', {
         'contest': contest,
