@@ -54,12 +54,11 @@ def contest_problem(request, contest_pk, problem_pk=None):
 def contest_submissions(request, contest_pk):
     contest = get_object_or_404(FrontEndContest, pk=contest_pk)
     user = request.user
+
     if not contest.participants.filter(pk=user.pk).exists():
         raise Http404
     
-    submissions = FrontEndContestSubmission.objects \
-        .filter(user=user, contest=contest) \
-        .order_by('-upload_date')
+    submissions = FrontEndContestSubmission.objects.filter(user=user, contest=contest)
     return render(request, 'contest/contest_submissions.html', {
         'submissions': submissions,
         'contest': contest

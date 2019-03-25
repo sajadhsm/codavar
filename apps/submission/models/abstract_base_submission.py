@@ -24,6 +24,7 @@ class AbstractBaseSubmission(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['-upload_date']
 
     def __str__(self):
         return f'By {self.user.email} at {self.upload_date}'

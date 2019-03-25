@@ -9,6 +9,7 @@ class AbstractBaseContest(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['-start_date']
     
     def __str__(self):
         return self.name
