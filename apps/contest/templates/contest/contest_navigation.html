@@ -5,10 +5,12 @@
                 href="{% url 'contest_index' contest.pk %}">
                 Problems
             </a>
+            {% if user in contest.participants.all %}
             <a class="nav-link {% if active == 'submissions' %}active{% endif %}"
                 href="{% url 'contest_submissions' contest.pk %}">
                 Submissions
             </a>
+            {% endif %}
             <a class="nav-link {% if active == 'leaderboard' %}active{% endif %}"
                 href="{% url 'contest_leaderboard' contest.pk %}">
                 Leaderboard
@@ -22,8 +24,6 @@
 </div>
 
 <script>
-console.log('WTF')
-
 function getDistanceTime(endDate) {
     const distance = new Date(endDate) - new Date();
 

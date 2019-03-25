@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
@@ -51,11 +52,13 @@ def contest_problem(request, contest_pk, problem_pk=None):
 @login_required
 @check_contest_access(FrontEndContest)
 def contest_submissions(request, contest_pk):
-    # Get the contest only for count-down
-    # Better to find a work around to avoid this query
     contest = get_object_or_404(FrontEndContest, pk=contest_pk)
+    user = request.user
+    if not contest.participants.filter(pk=user.pk).exists():
+        raise Http404
+    
     submissions = FrontEndContestSubmission.objects \
-        .filter(user=request.user, contest=contest_pk) \
+        .filter(user=user, contest=contest) \
         .order_by('-upload_date')
     return render(request, 'contest/contest_submissions.html', {
         'submissions': submissions,
