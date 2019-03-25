@@ -16,13 +16,16 @@
                 Leaderboard
             </a>
         </div>
+        {% if contest.is_in_progress %}
         <div class="remaining-time">
             Remaining Time: 
             <span class="count-down" data-end-date={{contest.end_date.isoformat}}></span>
         </div>
+        {% endif %}
     </nav>
 </div>
 
+{% if contest.is_in_progress %}
 <script>
 function getDistanceTime(endDate) {
     const distance = new Date(endDate) - new Date();
@@ -55,3 +58,4 @@ const contestInterval = setInterval(() => {
     displayCountDown(remainingTimeCountdown);
 }, 1000);
 </script>
+{% endif %}
