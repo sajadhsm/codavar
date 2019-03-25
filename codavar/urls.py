@@ -21,8 +21,7 @@ from django.conf.urls.static import static
 from django.contrib.flatpages import views
 
 urlpatterns = [
-    path('', include('main.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('', include('apps.urls')),
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
     # Flat pages
