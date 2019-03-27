@@ -47,11 +47,11 @@
         <table class="table table-bordered bg-white shadow-sm text-center">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col" style="width: 5%;">Final Code</th>
+                    <th scope="col" style="width: 50px;">Final Code</th>
                     <th scope="col">Problem</th>
                     <th scope="col">Upload Date</th>
-                    <th scope="col" style="width: 10%;">Status</th>
-                    <th scope="col" style="width: 10%;">File</th>
+                    <th scope="col" style="width: 125px;">Status</th>
+                    <th scope="col" style="width: 50px;">File</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,11 +59,12 @@
                 {% for sub in submissions %}
                 <tr>
                     <td>
-                        <a href="{% url 'set_as_final_sub' contest.pk sub.pk %}"
-                            class="check-link btn btn-sm {% if sub.is_final %}btn-dark{% else %}btn-outline-dark{% endif %}">
-                            {% if sub.is_final %}
-                            <span>&#10003;</span>
-                            {% endif %}
+                        <a href="{% url 'set_as_final_sub' contest.pk sub.pk %}" class="text-dark">
+                            <svg
+                                class="icon icon-checkbox-{{ sub.is_final|yesno:"checked,unchecked" }}"
+                                style="font-size: 24px;">
+                                <use xlink:href="#icon-checkbox-{{ sub.is_final|yesno:"checked,unchecked" }}"></use>
+                            </svg>
                         </a>
                     </td>
                     <th scope="row">
@@ -85,7 +86,13 @@
                             {% endif %}
                         {% endif %}
                     </td>
-                    <td><a href="{% url 'submission_file_download' sub.pk %}">Download</a></td>
+                    <td>
+                        <a href="{% url 'submission_file_download' sub.pk %}" class="text-dark">
+                            <svg class="icon icon-zip" style="font-size: 30px;">
+                                <use xlink:href="#icon-zip"></use>
+                            </svg>
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
                 {% else %}
