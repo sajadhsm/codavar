@@ -73,12 +73,16 @@
                     </th>
                     <td>{{ sub.upload_date|date:"d M Y H:i"}}</td>
                     <td class="sub-status-td">
-                        {% if sub.judge_score == sub.problem.score %}
-                        <span class="bg-success text-white p-2 rounded">{{ sub.judge_score }}</span>
-                        {% elif sub.judge_score == None %}
+                        {% if sub.status == 'PN' %}
                         <span class="bg-warning text-dark p-2 rounded">Pending</span>
-                        {% else %}
-                        <span class="bg-danger text-white p-2 rounded">{{ sub.judge_score }}</span>
+                        {% elif sub.status == 'ER' %}
+                        <span class="bg-dark text-white p-2 rounded">Error</span>
+                        {% elif sub.status == 'OK' %}
+                            {% if sub.judge_score == sub.problem.score %}
+                            <span class="bg-success text-white p-2 rounded">{{ sub.judge_score }}</span>
+                            {% else %}
+                            <span class="bg-danger text-white p-2 rounded">{{ sub.judge_score }}</span>
+                            {% endif %}
                         {% endif %}
                     </td>
                     <td><a href="{% url 'submission_file_download' sub.pk %}">Download</a></td>

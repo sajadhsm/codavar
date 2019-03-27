@@ -1,4 +1,5 @@
 import secrets
+import os
 from zipfile import ZipFile
 
 from django.db import models
@@ -24,15 +25,21 @@ class FrontEndSubmission(AbstractBaseSubmission):
         related_query_name='submission',
         on_delete=models.CASCADE
     )
-    judge_score = models.PositiveIntegerField(null=True)
+    judge_score = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'{self.problem.title} by {self.user.email} at {self.upload_date}'
 
     def extract(self):
-        with ZipFile(self.file.path, 'r') as zip:
-            # Extract the zip content to same name sibiling directory
-            zip.extractall(self.file.path[:-4])
+        """Extract the zip content to same name sibiling directory."""
+        extract_path = self.get_file_extract_path()
+        with ZipFile(self.file, 'r') as zip:
+            for subfile in zip.namelist():
+                zip.extract(subfile, path=extract_path)
+    
+    def get_file_extract_path(self):
+        file_dir = os.path.splitext(self.file.path)[0]
+        return file_dir + '_dir'
 
 
 class FrontEndContestSubmission(FrontEndSubmission):

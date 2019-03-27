@@ -72,8 +72,11 @@ def set_as_final_sub(request, contest_pk, sub_pk):
 
     if not contest.is_in_progress:
         messages.error(request, "You can only set a submission as final during the contest!")
-    elif submission.judge_score == None: # Pending submission
-        messages.info(request, "This submission can't be set as final yet!")
+    elif (
+        submission.status == FrontEndContestSubmission.PENDING or
+        submission.status == FrontEndContestSubmission.ERROR
+    ):
+        messages.info(request, "This submission can't be set as final!")
     elif submission.is_final:
         messages.info(request, "This submission has been already set as final.")
     else:

@@ -34,5 +34,5 @@ class FrontEndProblem(AbstractBaseProblem):
         script_module = importlib.import_module(
             self.selenium_script_as_module_string(),
             package=settings.SELENIUM_SCRIPT_IMPORT_MODULE_PACKAGE)
-        selenium_test = script_module.selenium_test
-        return selenium_test(sub_dir_path)
+        run_test = script_module.run_test
+        return run_test(sub_dir_path)

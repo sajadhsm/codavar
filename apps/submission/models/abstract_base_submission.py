@@ -12,6 +12,20 @@ def generate_filename(instance, filename):
     return f'submissions/{secrets.token_urlsafe(10)}/{filename}'
 
 class AbstractBaseSubmission(models.Model):
+    PENDING = 'PN'
+    OK = 'OK'
+    ERROR = 'ER'
+
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (OK, 'Ok'),
+        (ERROR, 'Error')
+    )
+    status = models.CharField(
+        max_length=2,
+        choices=STATUS_CHOICES,
+        default=PENDING
+    )
     user = models.ForeignKey(
         get_user_model(),
         related_name="%(app_label)s_%(class)ss",
