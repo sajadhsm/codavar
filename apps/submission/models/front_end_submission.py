@@ -25,8 +25,12 @@ class FrontEndSubmission(AbstractBaseSubmission):
         related_query_name='submission',
         on_delete=models.CASCADE
     )
-    judge_score = models.PositiveIntegerField(default=0)
+    relative_score = models.FloatField(default=0)
 
+    @property
+    def judge_score(self):
+        return int(self.relative_score * self.problem.score)
+    
     def __str__(self):
         return f'{self.problem.title} by {self.user.email} at {self.upload_date}'
 

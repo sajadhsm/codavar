@@ -27,8 +27,7 @@ def run_selenium_test(submission_pk):
         # but the reason should be returned and let the user know about it
         # Also for now only the relative_score is returned
         relative_score = problem.run_selenium_script(submission.get_file_extract_path())
-        judge_score = int(relative_score * problem.score)
-        submission.judge_score = judge_score
+        submission.relative_score = relative_score
         submission.status = FrontEndContestSubmission.OK
 
         current_final = FrontEndContestSubmission.objects.filter(
@@ -37,7 +36,7 @@ def run_selenium_test(submission_pk):
             contest=submission.contest
         ).first()
 
-        if not current_final or judge_score > current_final.judge_score:
+        if not current_final or submission.judge_score > current_final.judge_score:
             submission.set_as_final() # Calls save() internally
         else:
             submission.save()
