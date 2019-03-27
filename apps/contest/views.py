@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -58,7 +59,17 @@ def contest_submissions(request, contest_pk):
     if not contest.participants.filter(pk=user.pk).exists():
         raise Http404
     
-    submissions = FrontEndContestSubmission.objects.filter(user=user, contest=contest)
+    all_submissions = FrontEndContestSubmission.objects.filter(user=user, contest=contest)
+    paginator = Paginator(all_submissions, 12)
+    page = request.GET.get('page', 1)
+
+    try:
+        submissions = paginator.page(page)
+    except PageNotAnInteger:
+        submissions = paginator.page(1)
+    except EmptyPage:
+        submissions = paginator.page(paginator.num_pages)
+        
     return render(request, 'contest/contest_submissions.html', {
         'submissions': submissions,
         'contest': contest
@@ -109,7 +120,18 @@ def contest_registration(request, contest_pk):
 @check_contest_access(FrontEndContest)
 def contest_leaderboard(request, contest_pk):
     contest = get_object_or_404(FrontEndContest, pk=contest_pk)
-    leaderboard = get_contest_leaderboard(contest)
+    leaderboard_list = get_contest_leaderboard(contest)
+
+    paginator = Paginator(leaderboard_list, 50)
+    page = request.GET.get('page', 1)
+    
+    try:
+        leaderboard = paginator.page(page)
+    except PageNotAnInteger:
+        leaderboard = paginator.page(1)
+    except EmptyPage:
+        leaderboard = paginator.page(paginator.num_pages)
+
     return render(
         request,
         'contest/contest_leaderboard.html',
