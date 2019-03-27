@@ -42,8 +42,8 @@
 
                     {% for sub in entry.final_subs %}
                     {% if sub %}
-                    <td style="{{sub|respective_bg_color_css_rule}}">
-                        <span class="font-weight-bold">{{ sub.judge_score }}</span>
+                    <td style="background-color: rgba(139, 195, 74, {{sub.relative_score}});">
+                        <b>{{ sub.judge_score }}</b>
                         <br>
                         <small>{{ sub.frontendcontestsubmission.contest_start_timedelta|timedelta_hide_seconds }}</small>
                     </td>
