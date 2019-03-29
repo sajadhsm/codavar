@@ -11,7 +11,7 @@ from .models import FrontEndContest, FrontEndContestParticipation
 from .decorators import check_contest_access
 from .forms import FrontEndContestSubmissionForm
 from .tasks import run_selenium_test
-from .utils import get_contest_leaderboard
+from .utils.leaderboard import get_contest_leaderboard
 
 def index(request):
     contests = FrontEndContest.objects.all()
