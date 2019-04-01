@@ -6,15 +6,6 @@
 
 {% block content %}
 <div class="container my-5">
-    {% for message in messages %}
-    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-        {{ message }}
-    </div>
-    {% endfor %}
-    
     <h3 class="display-4">{% trans "Verify Your E-mail Address" %}</h3>
 
     {% url 'account_email' as email_url %}

@@ -7,15 +7,6 @@
 
 {% block content %}
 <div class="container my-5">
-    {% for message in messages %}
-    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-        {{ message }}
-    </div>
-    {% endfor %}
-
     <h3 class="display-4">{% trans "Email Addresses" %}</h3>
     {% if user.emailaddress_set.all %}
     <p class="lead">{% trans 'The following e-mail addresses are associated with your account:' %}</p>
