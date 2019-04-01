@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="col-lg-6 col-md-10 col-sm-12">
         
             {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
@@ -20,11 +20,11 @@
                     <form method="post">
                         {% csrf_token %}
                         {% include 'includes/form.html' %}
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Update</button>
+                        <button type="submit" class="btn btn-primary btn-block">Update</button>
                     </form>
                 </div>
                 <div class="card-footer text-muted text-center">
-                    <a href="{% url 'change_password' %}" class="text-decoration-none">Change your password</a>
+                    <a href="{% url 'account_change_password' %}" class="text-decoration-none">Change your password</a>
                 </div>
             </div>
         </div>
