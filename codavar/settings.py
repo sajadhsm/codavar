@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     
     'widget_tweaks',
+    'crispy_forms',
     'django_summernote',
     'allauth',
     'allauth.account',
@@ -73,7 +74,10 @@ ROOT_URLCONF = 'codavar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -199,6 +203,11 @@ SUMMERNOTE_CONFIG = {
         'height': '640',
     },
 }
+
+
+# Crispy Forms
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Django messages
