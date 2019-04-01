@@ -44,8 +44,25 @@ def contest_problem(request, contest_pk, problem_pk=None):
     else:
         form = FrontEndContestSubmissionForm()
     
+    # TODO: Make it optimized!
+    # Lots of calculations are happening here for a colored badge in the front-end :\
+    contest_problems = []
+    for prob in contest.problems.all():
+        has_user_solved_problem = FrontEndContestSubmission.objects.filter(
+            user=request.user,
+            contest=contest,
+            problem=prob,
+            relative_score__gte=1.0
+        ).exists()
+
+        contest_problems.append({
+            "problem": prob,
+            "solved": bool(has_user_solved_problem)
+        })
+    
     return render(request, 'contest/contest.html', {
         'contest': contest,
+        'contest_problems': contest_problems,
         'problem': problem,
         'form': form
     })
