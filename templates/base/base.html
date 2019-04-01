@@ -62,6 +62,11 @@
         </div>
     </nav>
 
+    {% block narrow_messages %}
+    {% comment %} Global messages display handling {% endcomment %}
+    {% include 'includes/narrow_messages.html' %}
+    {% endblock narrow_messages %}
+
     <main role="main">
         {% block content %}
         {% endblock %}
