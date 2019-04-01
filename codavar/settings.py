@@ -44,12 +44,17 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     
     'widget_tweaks',
+    'crispy_forms',
     'django_summernote',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'apps.contest',
     'apps.problem',
     'apps.submission',
     'apps.accounts',
+    'apps.pages',
 ]
 
 SITE_ID = 1
@@ -69,7 +74,10 @@ ROOT_URLCONF = 'codavar.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'allauth')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,6 +163,7 @@ SELENIUM_SCRIPT_ROOT = os.path.join(BASE_DIR, 'test_scripts/selenium_scripts')
 
 SELENIUM_SCRIPT_URL = '/judge-script/fe/'
 
+
 # Authentication
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -162,6 +171,21 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGOUT_REDIRECT_URL = 'index'
 
 LOGIN_REDIRECT_URL = 'index'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_USERNAME_REQUIRED = False
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
 # Celery
@@ -179,6 +203,11 @@ SUMMERNOTE_CONFIG = {
         'height': '640',
     },
 }
+
+
+# Crispy Forms
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Django messages
@@ -201,3 +230,16 @@ SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool
 
 SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', default=False, cast=bool)
 SECURE_CONTENT_TYPE_NOSNIFF = config('SECURE_CONTENT_TYPE_NOSNIFF', default=False, cast=bool)
+
+
+# Email
+
+EMAIL_HOST = config('EMAIL_HOST')
+
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+
+EMAIL_PORT = config('EMAIL_PORT', cast=int)

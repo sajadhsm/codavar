@@ -6,19 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 
 from .models import CustomUser
-from .forms import CustomUserCreationForm, CustomUserEditForm
-
-def signup(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('index')
-    else:
-        form = CustomUserCreationForm()
-        
-    return render(request, 'accounts/signup.html', {'form': form})
+from .forms import CustomUserEditForm
 
 @login_required
 def edit_user_view(request):
@@ -34,19 +22,4 @@ def edit_user_view(request):
         form = CustomUserEditForm(instance=request.user)
     
     return render(request, 'accounts/edit.html', {'form': form})
-
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
-        else:
-            messages.error(request, 'Please correct the error(s) below.')
-    else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/change_password.html', {'form': form})
     

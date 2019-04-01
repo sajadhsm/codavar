@@ -44,7 +44,7 @@
                             </svg>
                             <span class="ml-2">Edit</span>
                         </a>
-                        <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+                        <a class="dropdown-item d-flex align-items-center" href="{% url 'account_logout' %}">
                             <svg class="icon icon-exit">
                                 <use xlink:href="#icon-exit"></use>
                             </svg>
@@ -55,12 +55,17 @@
             </ul>
             {% else %}
             <form class="form-inline ml-auto">
-                <a href="{% url 'login' %}" class="btn btn-success">Log in</a>
-                <a href="{% url 'signup' %}" class="btn btn-primary ml-2">Sign up</a>
+                <a href="{% url 'account_login' %}" class="btn btn-success">Log in</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-primary ml-2">Sign up</a>
             </form>
             {% endif %}
         </div>
     </nav>
+
+    {% block narrow_messages %}
+    {% comment %} Global messages display handling {% endcomment %}
+    {% include 'includes/narrow_messages.html' %}
+    {% endblock narrow_messages %}
 
     <main role="main">
         {% block content %}

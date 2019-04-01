@@ -53,3 +53,9 @@
   font-weight: 500;
   color: #343a40;
 }
+
+/* Override default bootstrap alert */
+.narrow-alert {
+  margin-bottom: 0;
+  border-radius: 0;
+}

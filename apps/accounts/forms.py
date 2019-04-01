@@ -19,4 +19,4 @@ class CustomUserEditForm(forms.ModelForm):
     
     class Meta:
         model = CustomUser
-        fields = ['email', 'first_name', 'last_name']
+        fields = ['first_name', 'last_name']

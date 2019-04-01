@@ -13,10 +13,6 @@ from .forms import FrontEndContestSubmissionForm
 from .tasks import run_selenium_test
 from .utils.leaderboard import get_contest_leaderboard
 
-def index(request):
-    contests = FrontEndContest.objects.all()
-    return render(request, 'contest/index.html', {'contests': contests})
-
 @login_required
 @check_contest_access(FrontEndContest)
 def contest_problem(request, contest_pk, problem_pk=None):
