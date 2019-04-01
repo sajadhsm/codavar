@@ -19,7 +19,7 @@
         {% if contest.is_in_progress %}
         <div class="remaining-time">
             Remaining Time: 
-            <span class="count-down" data-end-date={{contest.end_date.isoformat}}></span>
+            <b class="count-down" data-end-date={{contest.end_date.isoformat}}></b>
         </div>
         {% endif %}
     </nav>
