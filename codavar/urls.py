@@ -18,14 +18,15 @@ from django.urls import include, path
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.flatpages import views
 
 urlpatterns = [
-    path('', include('apps.urls')),
+    path('', include('apps.pages.urls')),
+    path('contest/', include('apps.contest.urls')),
+    path('submission/', include('apps.submission.urls')),
+    path('accounts/', include('apps.accounts.urls')),
+    
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
-    # Flat pages
-    path('about/', views.flatpage, {'url': '/about/'}, name='about'),
 ]
 
 if settings.DEBUG:
