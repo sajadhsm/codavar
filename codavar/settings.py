@@ -164,6 +164,11 @@ SELENIUM_SCRIPT_ROOT = os.path.join(BASE_DIR, 'test_scripts/selenium_scripts')
 SELENIUM_SCRIPT_URL = '/judge-script/fe/'
 
 
+# Important URLS
+
+URL_ADMIN = config('URL_ADMIN', default="admin/")
+
+
 # Authentication
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

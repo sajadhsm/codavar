@@ -25,7 +25,7 @@ urlpatterns = [
     path('submission/', include('apps.submission.urls')),
     path('accounts/', include('apps.accounts.urls')),
     
-    path('admin/', admin.site.urls),
+    path(settings.URL_ADMIN, admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
 ]
 
