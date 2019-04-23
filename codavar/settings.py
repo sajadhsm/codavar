@@ -207,6 +207,10 @@ SUMMERNOTE_CONFIG = {
         'width': '80%',
         'height': '640',
     },
+    'codemirror': {
+        'mode': 'htmlmixed',
+        'lineNumbers': 'true',
+    },
 }
 
 
