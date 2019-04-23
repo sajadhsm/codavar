@@ -1,0 +1,70 @@
+{% extends 'base/base.html' %}
+
+{% load main_tags %}
+
+{% block stylesheet %}
+<style>
+    table th,
+    table td {
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% include 'contest/contest_navigation.html' with active='leaderboard' contest=contest %}
+
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped bg-white shadow-sm text-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 5%;">Rank</th>
+                    <th scope="col">Name</th>
+                    {% for problem in contest.problems.all %}
+                    <th scope="col">
+                        <a href="{% url 'contest_problem' contest.pk problem.pk %}" class="text-decoration-none">
+                            {{ problem.title }}
+                        </a>
+                    </th>
+                    {% endfor %}
+                    <th scope="col">Score</th>
+                    <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if leaderboard %}
+                {% for entry in leaderboard %}
+                <tr {% if entry.user == user %}class="table-warning"{% endif %}>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ entry.user.get_full_name }}</td>
+
+                    {% for sub in entry.final_subs %}
+                    {% if sub %}
+                    <td style="background-color: rgba(139, 195, 74, {{sub.relative_score}});">
+                        <b>{{ sub.judge_score }}</b>
+                        <br>
+                        <small>{{ sub.frontendcontestsubmission.contest_start_timedelta|timedelta_hide_seconds }}</small>
+                    </td>
+                    {% else %}
+                    <td><small>---</small></td>
+                    {% endif %}
+                    {% endfor %}
+
+                    <td>{{ entry.total_score }}</td>
+                    <td>{{ entry.total_time|timedelta_hide_seconds }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="100%">No data</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'includes/pagination.html' with list=leaderboard %}
+</div>
+{% endblock %}

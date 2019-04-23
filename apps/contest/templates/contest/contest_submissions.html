@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+
+{% block stylesheet %}
+<style>
+    table th,
+    table td {
+        vertical-align: middle !important;
+    }
+
+    .check-link {
+        position: relative;
+        width: 20px;
+        height: 20px;
+    }
+
+    .check-link span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.3rem;
+    }
+
+    .sub-status-td span {
+        display: inline-block;
+        min-width: 3rem;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block narrow_messages %}
+{% comment %} Disable default position {% endcomment %}
+{% endblock narrow_messages %}
+
+{% block content %}
+
+{% include 'contest/contest_navigation.html' with active='submissions' contest=contest %}
+{% include 'includes/narrow_messages.html' %}
+
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white shadow-sm text-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" style="width: 50px;">Final Code</th>
+                    <th scope="col">Problem</th>
+                    <th scope="col">Upload Date</th>
+                    <th scope="col" style="width: 125px;">Status</th>
+                    <th scope="col" style="width: 50px;">File</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if submissions %}
+                {% for sub in submissions %}
+                <tr>
+                    <td>
+                        <a href="{% url 'set_as_final_sub' contest.pk sub.pk %}" class="text-dark">
+                            <svg
+                                class="icon icon-checkbox-{{ sub.is_final|yesno:"checked,unchecked" }}"
+                                style="font-size: 24px;">
+                                <use xlink:href="#icon-checkbox-{{ sub.is_final|yesno:"checked,unchecked" }}"></use>
+                            </svg>
+                        </a>
+                    </td>
+                    <th scope="row">
+                        <a href="{% url 'contest_problem' contest.pk sub.problem.pk %}" class="text-decoration-none">
+                            {{ sub.problem.title }}
+                        </a>
+                    </th>
+                    <td>{{ sub.upload_date|date:"d M Y H:i"}}</td>
+                    <td class="sub-status-td">
+                        {% if sub.status == 'PN' %}
+                        <span class="bg-warning text-dark p-2 rounded">Pending</span>
+                        {% elif sub.status == 'ER' %}
+                        <span class="bg-dark text-white p-2 rounded">Error</span>
+                        {% elif sub.status == 'OK' %}
+                            {% if sub.judge_score == sub.problem.score %}
+                            <span class="bg-success text-white p-2 rounded">{{ sub.judge_score }}</span>
+                            {% else %}
+                            <span class="bg-danger text-white p-2 rounded">{{ sub.judge_score }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'submission_file_download' sub.pk %}" class="text-dark">
+                            <svg class="icon icon-zip" style="font-size: 30px;">
+                                <use xlink:href="#icon-zip"></use>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5">No data</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include 'includes/pagination.html' with list=submissions %}
+</div>
+{% endblock %}

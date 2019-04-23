@@ -1,0 +1,107 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block stylesheet %}
+<style>
+    .sidebar-problem-title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+{% endblock stylesheet %}
+
+{% block content %}
+
+{% include 'contest/contest_navigation.html' with active='problems' contest=contest %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 mt-4">
+            <div class="card shadow-sm">
+                <div class="card-header h5">Problems</div>
+                <div class="list-group list-group-flush">
+                    {% for c_problem in contest_problems %}
+                    <a href="{% url 'contest_problem' contest.pk c_problem.problem.pk %}"
+                        class="list-group-item list-group-item-action {% if c_problem.problem.pk == problem.pk %}active{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="sidebar-problem-title mr-2">{{ c_problem.problem.title }}</span>
+                            {% if c_problem.solved %}
+                            <span class="badge badge-success">
+                                {{ c_problem.problem.score }}
+                            </span>
+                            {% else %}
+                            <span class="badge badge-{% if c_problem.problem.pk == problem.pk %}light{% else %}secondary{% endif %}">
+                                {{ c_problem.problem.score }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9 my-4">
+            <div class="card shadow-sm">
+                <h1 class="card-header h5 font-weight-bold">{{ problem.title }}</h1>
+                <div class="card-body">
+                    <div class="card-text">
+                        {{ problem.statement|safe }}
+                    </div>
+                </div>
+                {% if user in contest.participants.all %}
+                <div class="card-footer">
+                    {% if contest.is_in_progress  %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field }}
+                            {% endfor %}
+
+                            {% for field in form.visible_fields %}
+                            <div class="col-auto">
+                                <div class="custom-file">
+                                    {% render_field field class="custom-file-input" %}
+                                    {{ field|add_label_class:"custom-file-label" }}
+                                    {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                    <div style="color: #dc3545; font-size: 80%; margin-top: .25rem;">
+                                        {{ error }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-primary m-0" role="alert">
+                        Submission time is over!
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/bs-custom-file-input.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        bsCustomFileInput.init()
+    })
+</script>
+{% endblock %}

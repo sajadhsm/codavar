@@ -1,3 +1,12 @@
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
 .nav-scroller {
   position: relative;
   z-index: 2;
@@ -43,4 +52,10 @@
 .nav-underline .active {
   font-weight: 500;
   color: #343a40;
+}
+
+/* Override default bootstrap alert */
+.narrow-alert {
+  margin-bottom: 0;
+  border-radius: 0;
 }
