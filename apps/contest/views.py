@@ -122,8 +122,8 @@ def contest_registration(request, contest_pk):
                     contest=contest
                 )
             else:
-                messages.info(request, "Please set your first name and last name in-order to enter the contest!")
-                return redirect('account_edit')
+                messages.info(request, "Please set your <b>first name</b> and <b>last name</b> in order to register in the contest.")
+                return redirect('account_edit', contest_pk)
         
         if contest.has_started:
             return redirect('contest_index', contest_pk)

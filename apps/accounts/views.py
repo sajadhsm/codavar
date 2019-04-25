@@ -9,13 +9,16 @@ from .models import CustomUser
 from .forms import CustomUserEditForm
 
 @login_required
-def edit_user_view(request):
+def edit_user_view(request, contest_pk=None):
     if request.method == 'POST':
         form = CustomUserEditForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your information were updated successfully!')
-            return redirect('account_edit')
+            if contest_pk:
+                return redirect('contest_registration', contest_pk)
+            else:
+                messages.success(request, 'Your information were updated successfully!')
+                return redirect('account_edit')
         else:
             messages.error(request, 'Please correct the error(s) below.')
     else:
