@@ -11,6 +11,10 @@
 </style>
 {% endblock %}
 
+{% block title %}
+    Leaderboard - {{ contest.name }} - Codavar
+{% endblock title %}
+
 {% block content %}
 
 {% include 'contest/contest_navigation.html' with active='leaderboard' contest=contest %}

@@ -3,20 +3,20 @@
 {% block content %}
 <div class="jumbotron">
   <div class="container">
-    <h1 class="display-3">Codavar<small class="text-muted h5">Beta</small></h1>
-    <p class="lead">Codavar is an automated code judgment system which is currently able to test front-end codes!</p>
+    <h1 class="display-3 d-inline">Codavar</h1> <small class="text-muted h6">Beta</small>
+    <p class="lead">Codavar is another code judgment system that provides a competitive way to challenge your programming skills. <small><a class="text-secondary text-decoration-none" href="/about">Read more</a></small></p>
   </div>
 </div>
 
 <div class="container">
-  <h2 class="display-6 mb-4">Active Contests</h2>
+  <h2 class="display-6 mb-4">Contests</h2>
   {% for contest in contests %}
   <div class="card mb-3 shadow-sm">
     <div class="card-body">
       <div class="row text-center">
         <div class="col-md-3 pb-3 pb-md-0">
-            <small class="d-block font-weight-bold mb-2">Contest Name</small>
-            <h3 class="h5">{{ contest.name }}</h3>
+            <small class="d-block font-weight-bold mb-2">Name</small>
+            <h3 class="h6 font-weight-bold">{{ contest.name }}</h3>
         </div>
 
         <time class="col-md-3 pb-3 pb-md-0" datetime="{{ contest.start_date.isoformat }}" title="{{ contest.start_date|date:"d M Y H:i"}}">
@@ -29,7 +29,7 @@
         </time>
 
         <div class="col-md-3 pb-3 pb-md-0">
-            <small class="d-block font-weight-bold mb-2">Contest Duration</small>
+            <small class="d-block font-weight-bold mb-2">Duration</small>
             <div class="duration d-flex justify-content-center" data-duration="{{contest.duration.total_seconds}}"></div>
         </div>
         
@@ -50,6 +50,8 @@
       </div>
     </div>
   </div>
+  {% empty %}
+  <p class="text-center h4 text-muted">No active contest for now :(</p>
   {% endfor %}
 </div>
 {% endblock %}
