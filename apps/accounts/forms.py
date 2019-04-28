@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from allauth.account.forms import SignupForm
+from allauth.account.forms import SignupForm, LoginForm, ResetPasswordForm
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV3
 
@@ -31,3 +31,16 @@ class SignupFormWithReCaptcha(SignupForm):
     def save(self, request):
         user = super(SignupFormWithReCaptcha, self).save(request)
         return user
+
+class LoginFormWithReCaptcha(LoginForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV3, label="")
+
+    def login(self, *args, **kwargs):
+        return super(LoginFormWithReCaptcha, self).login(*args, **kwargs)
+
+class SetPasswordFormWithReCaptcha(ResetPasswordForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV3, label="")
+    
+    def save(self):
+        email_address = super(SetPasswordFormWithReCaptcha, self).save()
+        return email_address
