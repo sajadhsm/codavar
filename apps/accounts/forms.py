@@ -1,5 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from allauth.account.forms import SignupForm
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 
 from .models import CustomUser
 
@@ -20,3 +23,11 @@ class CustomUserEditForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['first_name', 'last_name']
+
+class SignupFormWithReCaptcha(SignupForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV3, label="")
+    field_order = ['email', 'password1', 'password2', 'captcha']
+    
+    def save(self, request):
+        user = super(SignupFormWithReCaptcha, self).save(request)
+        return user
