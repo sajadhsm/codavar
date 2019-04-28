@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'captcha',
 
     'apps.contest',
     'apps.problem',
@@ -191,6 +192,15 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_FORMS = {
+    'signup': 'apps.accounts.forms.SignupFormWithReCaptcha',
+    'login': 'apps.accounts.forms.LoginFormWithReCaptcha',
+    'reset_password': 'apps.accounts.forms.SetPasswordFormWithReCaptcha'
+}
+
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 
 
 # Celery
