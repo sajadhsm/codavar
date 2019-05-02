@@ -11,11 +11,16 @@
 <div class="container">
   <h2 class="display-6 mb-4">Contests</h2>
   {% for contest in contests %}
+  {% if contest.is_public or user.is_staff %}
   <div class="card mb-3 shadow-sm">
     <div class="card-body">
       <div class="row text-center">
         <div class="col-md-3 pb-3 pb-md-0">
+            {% if contest.is_public %}
             <small class="d-block font-weight-bold mb-2">Name</small>
+            {% else %}
+            <small class="badge badge-warning text-uppercase mb-2">Not Public</small>
+            {% endif %}
             <h3 class="h6 font-weight-bold">{{ contest.name }}</h3>
         </div>
 
@@ -38,10 +43,17 @@
             <a href="{% url 'contest_index' contest.pk %}" class="btn btn-block btn-secondary" role="button">Review</a>
           {% else %}
             {% if user in contest.participants.all %}
-            <a
-              href="{% url 'contest_index' contest.pk %}"
-              class="btn btn-block btn-primary {% if not contest.is_in_progress %}disabled{% endif %}"
-              role="button">Enter</a>
+              {% if user.is_staff %}
+              <a
+                href="{% url 'contest_index' contest.pk %}"
+                class="btn btn-block btn-primary"
+                role="button">Enter</a>
+              {% else %}
+              <a
+                href="{% url 'contest_index' contest.pk %}"
+                class="btn btn-block btn-primary {% if not contest.is_in_progress %}disabled{% endif %}"
+                role="button">Enter</a>
+              {% endif %}
             {% else %}
             <a href="{% url 'contest_registration' contest.pk %}" class="btn btn-block btn-success" role="button">Register</a>
             {% endif %}
@@ -50,6 +62,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
   {% empty %}
   <p class="text-center h4 text-muted">No active contest available :(</p>
   {% endfor %}

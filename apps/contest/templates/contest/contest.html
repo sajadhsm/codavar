@@ -58,7 +58,7 @@
                 </div>
                 {% if user in contest.participants.all %}
                 <div class="card-footer">
-                    {% if contest.is_in_progress  %}
+                    {% if contest.is_in_progress or user.is_staff  %}
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-row">
