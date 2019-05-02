@@ -23,7 +23,7 @@ def contest_problem(request, contest_pk, problem_pk=None):
         problem = contest.problems.first()
 
     if request.method == 'POST':
-        if contest.is_in_progress:
+        if contest.is_in_progress or request.user.is_staff:
             form = FrontEndContestSubmissionForm(request.POST, request.FILES)
             if form.is_valid():
                 submission = form.save(commit=False)
@@ -94,7 +94,12 @@ def set_as_final_sub(request, contest_pk, sub_pk):
     submission = get_object_or_404(FrontEndContestSubmission, pk=sub_pk, user=request.user)
     contest = submission.contest
 
-    if not contest.is_in_progress:
+    if request.user.is_staff:
+        # TODO: Use a better condition for STAFFs
+        # Currently the PENDING/ERROR or ALREADY FINAL subs can be set as final for STAFFs
+        submission.set_as_final()
+        messages.success(request, "The submission has been successfully set as final.")
+    elif not contest.is_in_progress:
         messages.error(request, "You can only set a submission as final during the contest!")
     elif (
         submission.status == FrontEndContestSubmission.PENDING or
@@ -112,6 +117,10 @@ def set_as_final_sub(request, contest_pk, sub_pk):
 @login_required
 def contest_registration(request, contest_pk):
     contest = get_object_or_404(FrontEndContest, pk=contest_pk)
+
+    # Different than @check_contest_access(FrontEndContest)
+    if not (request.user.is_staff or contest.is_public):
+        raise Http404
 
     if not contest.has_ended:
         user = request.user
