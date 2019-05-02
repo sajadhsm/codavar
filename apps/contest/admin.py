@@ -39,4 +39,4 @@ class FrontEndContestParticipationAdmin(admin.ModelAdmin):
     
     list_display = ['participant', 'contest', 'reg_date']
     list_filter = ['contest', 'reg_date']
-    search_fields = ['contest', 'participant']
+    search_fields = ['contest__name', 'participant__email']
