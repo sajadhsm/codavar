@@ -3,7 +3,9 @@ from django_summernote.admin import SummernoteModelAdmin
 
 from .models.front_end_problem import FrontEndProblem
 
-class ProblemAdmin(SummernoteModelAdmin):  # instead of ModelAdmin
+@admin.register(FrontEndProblem)
+class FrontEndProblemAdmin(SummernoteModelAdmin):  # instead of ModelAdmin
     summernote_fields = '__all__'
 
-admin.site.register(FrontEndProblem, ProblemAdmin)
+    list_display = ['title', 'score']
+    search_fields = ['title']
