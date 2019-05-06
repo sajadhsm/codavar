@@ -136,6 +136,8 @@ def contest_registration(request, contest_pk):
         
         if contest.has_started:
             return redirect('contest_index', contest_pk)
+        else:
+            messages.success(request, "You have been added to contest participants list. Please wait for the contest to begins.")
 
     return redirect('index')
 
