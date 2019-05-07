@@ -17,7 +17,13 @@
       <div class="row text-center">
         <div class="col-md-3 pb-3 pb-md-0">
             {% if contest.is_public %}
-            <small class="d-block font-weight-bold mb-2">Name</small>
+              {% if not contest.has_started %}
+              <small class="badge badge-primary text-uppercase mb-2">Upcoming</small>
+              {% elif contest.is_in_progress %}
+              <small class="badge badge-success text-uppercase mb-2">In Progress</small>
+              {% else %}
+              <small class="d-block font-weight-bold mb-2">Name</small>
+              {% endif %}
             {% else %}
             <small class="badge badge-warning text-uppercase mb-2">Not Public</small>
             {% endif %}
