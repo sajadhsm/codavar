@@ -13,6 +13,9 @@ def run_selenium_test(submission_pk):
     If the submission gets a higher score than current problem
     final sub, it will set as final automaticlly.
     """
+    # TODO: Pass the submission object instead of the PK
+    # There is JSON Serializer error in CONTEST_PROBLEM POST for now
+    # so we are passing the PK and retrive the object from the DB again :|
     submission = FrontEndContestSubmission.objects.get(pk=submission_pk)
     problem = submission.problem
 
