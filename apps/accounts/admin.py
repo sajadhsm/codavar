@@ -9,11 +9,12 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     model = CustomUser
 
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active',)
-    list_filter = ('email', 'first_name', 'last_name', 'is_staff', 'is_active',)
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined',)
+    list_filter = ('date_joined', 'is_staff', 'is_active',)
 
+    readonly_fields = ('date_joined',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'password', 'date_joined')}),
         ('Personal info', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
@@ -24,7 +25,7 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
     
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ('email', 'first_name', 'last_name',)
+    ordering = ('-date_joined',)
 
 admin.site.register(CustomUser, CustomUserAdmin)
