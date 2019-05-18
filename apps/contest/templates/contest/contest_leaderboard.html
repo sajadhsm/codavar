@@ -42,7 +42,7 @@
                 {% for entry in leaderboard %}
                 <tr {% if entry.user == user %}class="table-warning"{% endif %}>
                     <th scope="row">{{ entry.rank }}</th>
-                    <td>{{ entry.user.get_full_name }}</td>
+                    <td>{{ entry.user.get_full_name|title }}</td>
 
                     {% for sub in entry.final_subs %}
                     {% if sub %}
