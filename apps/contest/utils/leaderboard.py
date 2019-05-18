@@ -14,6 +14,11 @@ def compare(a, b):
         else:
             return 0
 
+def add_rank_prop(data):
+    index, item = data
+    item['rank'] = index + 1
+    return item
+
 def get_contest_leaderboard(contest):
     leaderboard = []
 
@@ -54,4 +59,6 @@ def get_contest_leaderboard(contest):
         })
     
     leaderboard.sort(key=cmp_to_key(compare))
+    # Add rank property (To fix paginated leaderboard)
+    leaderboard = list(map(add_rank_prop, enumerate(leaderboard)))
     return leaderboard
