@@ -41,6 +41,6 @@ class LoginFormWithReCaptcha(LoginForm):
 class SetPasswordFormWithReCaptcha(ResetPasswordForm):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label="")
     
-    def save(self):
-        email_address = super(SetPasswordFormWithReCaptcha, self).save()
+    def save(self, request):
+        email_address = super(SetPasswordFormWithReCaptcha, self).save(request)
         return email_address
