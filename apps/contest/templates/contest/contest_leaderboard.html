@@ -27,14 +27,14 @@
                     <th scope="col" style="width: 5%;">Rank</th>
                     <th scope="col">Name</th>
                     {% for problem in contest.problems.all %}
-                    <th scope="col">
+                    <th scope="col" style="min-width: 125px;">
                         <a href="{% url 'contest_problem' contest.pk problem.pk %}" class="text-decoration-none">
                             {{ problem.title }}
                         </a>
                     </th>
                     {% endfor %}
                     <th scope="col">Score</th>
-                    <th scope="col">Time</th>
+                    <th scope="col" style="min-width: 100px;">Time</th>
                 </tr>
             </thead>
             <tbody>
