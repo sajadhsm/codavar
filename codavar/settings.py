@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'captcha',
+    'tawkto',
 
     'apps.contest',
     'apps.problem',
@@ -227,6 +228,12 @@ SUMMERNOTE_CONFIG = {
 # Crispy Forms
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Tawkto
+
+TAWKTO_ID_SITE = config('TAWKTO_ID_SITE')
+TAWKTO_API_KEY = config('TAWKTO_API_KEY')
+TAWKTO_IS_SECURE = True
 
 
 # Django messages
