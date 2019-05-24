@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load widget_tweaks %}
+{% load tawkto_tags %}
 
 {% block stylesheet %}
 <style>
@@ -108,4 +109,8 @@
         bsCustomFileInput.init()
     })
 </script>
+
+{% if user.is_authenticated and user in contest.participants.all %}
+{% tawkto_script user_name=request.user.get_full_name %}
+{% endif %}
 {% endblock %}
